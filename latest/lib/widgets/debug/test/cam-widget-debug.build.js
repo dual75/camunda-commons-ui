@@ -74,19 +74,20 @@ module.exports = ['$timeout', '$translate', function($timeout, $translate) {
 'use strict';
 
 
-var template = "<div class=\"debug\">\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default btn-round\"\n            ng-click=\"toggleOpen()\"\n            uib-tooltip=\"{{tooltip}}\">\n      <span class=\"glyphicon\"\n            ng-class=\"{'glyphicon-eye-open': !open, 'glyphicon-eye-close': open}\"></span>\n    </button>\n  </div>\n  <div class=\"col-xs-10\"\n       ng-show=\"open\">\n    <span ng-show=\"extended\" cam-widget-clipboard=\"extendedInfo\"\n          no-tooltip>\n      <code>{{ extensionName }}</code>\n    </span>\n    <pre ng-show=\"extended\">{{ extendedInfo }}</pre>\n    <span cam-widget-clipboard=\"debugged | json \"\n          no-tooltip>\n      <code>{{ varName }}</code>\n    </span>\n    <pre>{{ debugged | json }}</pre>\n  </div>\n</div>\n";
+var template = "<div class=\"debug\">\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default btn-round\"\n            ng-click=\"toggleOpen()\"\n            uib-tooltip=\"{{tooltip}}\"\n            tooltip-placement=\"{{tooltipPlacement}}\">\n      <span class=\"glyphicon\"\n            ng-class=\"{'glyphicon-eye-open': !open, 'glyphicon-eye-close': open}\"></span>\n    </button>\n  </div>\n  <div class=\"col-xs-10\"\n       ng-show=\"open\">\n    <span ng-show=\"extended\" cam-widget-clipboard=\"extendedInfo\"\n          no-tooltip>\n      <code>{{ extensionName }}</code>\n    </span>\n    <pre ng-show=\"extended\">{{ extendedInfo }}</pre>\n    <span cam-widget-clipboard=\"debugged | json \"\n          no-tooltip>\n      <code>{{ varName }}</code>\n    </span>\n    <pre>{{ debugged | json }}</pre>\n  </div>\n</div>\n";
 
 module.exports = [function() {
   return {
     template: template,
 
     scope: {
-      debugged:       '=',
-      displayName:    '@displayName',
-      extensionName:  '@extensionName',
-      open:           '@',
-      extendedInfo:   '=',
-      tooltip:        '@camWidgetDebugTooltip'
+      debugged:         '=',
+      displayName:      '@displayName',
+      extensionName:    '@extensionName',
+      open:             '@',
+      extendedInfo:     '=',
+      tooltip:          '@camWidgetDebugTooltip',
+      tooltipPlacement: '@camWidgetDebugTooltipPlacement'
     },
 
     link: function(scope, element, attrs) {
