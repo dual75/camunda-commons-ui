@@ -1,5 +1,5 @@
 <html>
-<!-- Tue Mar 05 2019 08:45:46 GMT+0100 (CET) -->
+<!-- Tue Mar 05 2019 14:43:07 GMT+0100 (CET) -->
 <head>
 <meta charset="utf-8" />
 <title>Camunda commons UI library</title>
@@ -149,36 +149,26 @@ This project is used internally and the API of its components are subject to cha
 <li><code>cam-widget-var-template</code></li>
 </ul>
 <h4 id="developing-the-widgets">Developing the widgets</h4>
-<pre><code class="lang-sh">grunt auto-build
-</code></pre>
+<pre><code class="language-sh">grunt auto-build</code></pre>
 <h4 id="testing-the-widgets">Testing the widgets</h4>
-<pre><code class="lang-sh">npm install
+<pre><code class="language-sh">npm install
 ./node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager --chrome update
-grunt
-</code></pre>
+grunt</code></pre>
 <p>While developing widgets, you may want to run the tests as a change occurs, here is a way to achieve that:</p>
-<pre><code class="lang-sh">npm install -g nodemon
-nodemon -w lib/widgets/ --exec &quot;protractor ./test/protractor.conf.js&quot;
-</code></pre>
+<pre><code class="language-sh">npm install -g nodemon
+nodemon -w lib/widgets/ --exec &quot;protractor ./test/protractor.conf.js&quot;</code></pre>
 <p>You can also run the tests on a single widget like that:</p>
-<pre><code>TESTED=variable nodemon -w lib/widgets/ --exec &quot;protractor ./test/protractor.conf.js&quot;
-</code></pre><p>This will only run the <code>cam-widget-variable</code> tests.</p>
+<pre><code>TESTED=variable nodemon -w lib/widgets/ --exec &quot;protractor ./test/protractor.conf.js&quot;</code></pre><p>This will only run the <code>cam-widget-variable</code> tests.</p>
 <h2 id="grunt-connect-keep-alive-web-server">grunt connect keep alive web server</h2>
-<pre><code>grunt connect:widgetTests:keepalive
-</code></pre><h2 id="test">Test</h2>
-<pre><code class="lang-sh">grunt karma
-</code></pre>
+<pre><code>grunt connect:widgetTests:keepalive</code></pre><h2 id="test">Test</h2>
+<pre><code class="language-sh">grunt karma</code></pre>
 <h3 id="testing-the-widgets-under-macos">Testing the widgets under macOS</h3>
 <p>Add to protractor.config.js: </p>
-<pre><code>directConnect: true,
-</code></pre><p>Run in commons-ui folder: </p>
+<pre><code>directConnect: true,</code></pre><p>Run in commons-ui folder: </p>
 <pre><code>rm -rf node_modules
-npm install —-legacy-bundling
-</code></pre><p>Open webdriver-manager and change mac32.zip to mac64.zip if you run a newer macOS version.</p>
-<pre><code>vim /camunda-commons-ui/node_modules/protractor/bin/webdriver-manager
-</code></pre><p>Run chrome update for protractor</p>
-<pre><code>camunda-commons-ui/node_modules/protractor/bin/webdriver-manager --chrome update
-</code></pre><h2 id="license">License</h2>
+npm install —-legacy-bundling</code></pre><p>Open webdriver-manager and change mac32.zip to mac64.zip if you run a newer macOS version.</p>
+<pre><code>vim /camunda-commons-ui/node_modules/protractor/bin/webdriver-manager</code></pre><p>Run chrome update for protractor</p>
+<pre><code>camunda-commons-ui/node_modules/protractor/bin/webdriver-manager --chrome update</code></pre><h2 id="license">License</h2>
 <p>Unless otherwise specified this project is licensed under <a href="./LICENSE">Apache License Version 2.0</a>.</p>
 <h2 id="authors">Authors</h2>
 <ul>
