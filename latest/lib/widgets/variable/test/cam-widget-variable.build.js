@@ -40800,86 +40800,95 @@ function createCommonjsModule(fn, module) {
 
 var util = createCommonjsModule(function (module, exports) {
 
-var getAllMatches = function getAllMatches(string, regex) {
-  var matches = [];
-  var match = regex.exec(string);
-  while (match) {
-    var allmatches = [];
-    var len = match.length;
-    for (var index = 0; index < len; index++) {
-      allmatches.push(match[index]);
+  var getAllMatches = function getAllMatches(string, regex) {
+    var matches = [];
+    var match = regex.exec(string);
+
+    while (match) {
+      var allmatches = [];
+      var len = match.length;
+
+      for (var index = 0; index < len; index++) {
+        allmatches.push(match[index]);
+      }
+
+      matches.push(allmatches);
+      match = regex.exec(string);
     }
-    matches.push(allmatches);
-    match = regex.exec(string);
-  }
-  return matches;
-};
 
-var doesMatch = function doesMatch(string, regex) {
-  var match = regex.exec(string);
-  return !(match === null || typeof match === 'undefined');
-};
+    return matches;
+  };
 
-var doesNotMatch = function doesNotMatch(string, regex) {
-  return !doesMatch(string, regex);
-};
+  var doesMatch = function doesMatch(string, regex) {
+    var match = regex.exec(string);
+    return !(match === null || typeof match === 'undefined');
+  };
 
-exports.isExist = function (v) {
-  return typeof v !== 'undefined';
-};
+  var doesNotMatch = function doesNotMatch(string, regex) {
+    return !doesMatch(string, regex);
+  };
 
-exports.isEmptyObject = function (obj) {
-  return Object.keys(obj).length === 0;
-};
+  exports.isExist = function (v) {
+    return typeof v !== 'undefined';
+  };
 
-/**
- * Copy all the properties of a into b.
- * @param {*} target
- * @param {*} a
- */
-exports.merge = function (target, a) {
-  if (a) {
-    var keys = Object.keys(a); // will return an array of own properties
-    var len = keys.length; //don't make it inline
-    for (var i = 0; i < len; i++) {
-      target[keys[i]] = a[keys[i]];
+  exports.isEmptyObject = function (obj) {
+    return Object.keys(obj).length === 0;
+  };
+  /**
+   * Copy all the properties of a into b.
+   * @param {*} target
+   * @param {*} a
+   */
+
+
+  exports.merge = function (target, a) {
+    if (a) {
+      var keys = Object.keys(a); // will return an array of own properties
+
+      var len = keys.length; //don't make it inline
+
+      for (var i = 0; i < len; i++) {
+        target[keys[i]] = a[keys[i]];
+      }
     }
-  }
-};
-/* exports.merge =function (b,a){
-  return Object.assign(b,a);
-} */
+  };
+  /* exports.merge =function (b,a){
+    return Object.assign(b,a);
+  } */
 
-exports.getValue = function (v) {
-  if (exports.isExist(v)) {
-    return v;
-  } else {
-    return '';
-  }
-};
 
-// const fakeCall = function(a) {return a;};
-// const fakeCallNoReturn = function() {};
-
-exports.buildOptions = function (options, defaultOptions, props) {
-  var newOptions = {};
-  if (!options) {
-    return defaultOptions; //if there are not options
-  }
-
-  for (var i = 0; i < props.length; i++) {
-    if (options[props[i]] !== undefined) {
-      newOptions[props[i]] = options[props[i]];
+  exports.getValue = function (v) {
+    if (exports.isExist(v)) {
+      return v;
     } else {
-      newOptions[props[i]] = defaultOptions[props[i]];
+      return '';
     }
-  }
-  return newOptions;
-};
+  }; // const fakeCall = function(a) {return a;};
+  // const fakeCallNoReturn = function() {};
 
-exports.doesMatch = doesMatch;
-exports.doesNotMatch = doesNotMatch;
-exports.getAllMatches = getAllMatches;
+
+  exports.buildOptions = function (options, defaultOptions, props) {
+    var newOptions = {};
+
+    if (!options) {
+      return defaultOptions; //if there are not options
+    }
+
+    for (var i = 0; i < props.length; i++) {
+      if (options[props[i]] !== undefined) {
+        newOptions[props[i]] = options[props[i]];
+      } else {
+        newOptions[props[i]] = defaultOptions[props[i]];
+      }
+    }
+
+    return newOptions;
+  };
+
+  exports.doesMatch = doesMatch;
+  exports.doesNotMatch = doesNotMatch;
+  exports.getAllMatches = getAllMatches;
 });
 var util_1 = util.isExist;
 var util_2 = util.isEmptyObject;
@@ -40891,9 +40900,8 @@ var util_7 = util.doesNotMatch;
 var util_8 = util.getAllMatches;
 
 var convertToJson = function convertToJson(node, options) {
-  var jObj = {};
+  var jObj = {}; //when no child node or attr is present
 
-  //when no child node or attr is present
   if ((!node.child || util.isEmptyObject(node.child)) && (!node.attrsMap || util.isEmptyObject(node.attrsMap))) {
     return util.isExist(node.val) ? node.val : '';
   } else {
@@ -40906,36 +40914,40 @@ var convertToJson = function convertToJson(node, options) {
   }
 
   util.merge(jObj, node.attrsMap);
-
   var keys = Object.keys(node.child);
+
   for (var index = 0; index < keys.length; index++) {
     var tagname = keys[index];
+
     if (node.child[tagname] && node.child[tagname].length > 1) {
       jObj[tagname] = [];
+
       for (var tag in node.child[tagname]) {
         jObj[tagname].push(convertToJson(node.child[tagname][tag], options));
       }
     } else {
       jObj[tagname] = convertToJson(node.child[tagname][0], options);
     }
-  }
+  } //add value
 
-  //add value
+
   return jObj;
 };
 
 var convertToJson_1 = convertToJson;
-
 var node2json = {
-	convertToJson: convertToJson_1
+  convertToJson: convertToJson_1
 };
 
-var xmlNode = function (tagname, parent, val) {
+var xmlNode = function xmlNode(tagname, parent, val) {
   this.tagname = tagname;
   this.parent = parent;
   this.child = {}; //child tags
+
   this.attrsMap = {}; //attributes map
+
   this.val = val; //text only
+
   this.addChild = function (child) {
     if (Array.isArray(this.child[child.tagname])) {
       //already presents
@@ -40947,17 +40959,20 @@ var xmlNode = function (tagname, parent, val) {
 };
 
 var buildOptions = util.buildOptions;
-
-var TagType = { OPENING: 1, CLOSING: 2, SELF: 3, CDATA: 4 };
-var regx = '<((!\\[CDATA\\[([\\s\\S]*?)(]]>))|(([\\w:\\-._]*:)?([\\w:\\-._]+))([^>]*)>|((\\/)(([\\w:\\-._]*:)?([\\w:\\-._]+))\\s*>))([^<]*)';
-
-//const tagsRegx = new RegExp("<(\\/?[\\w:\\-\._]+)([^>]*)>(\\s*"+cdataRegx+")*([^<]+)?","g");
+var TagType = {
+  OPENING: 1,
+  CLOSING: 2,
+  SELF: 3,
+  CDATA: 4
+};
+var regx = '<((!\\[CDATA\\[([\\s\\S]*?)(]]>))|(([\\w:\\-._]*:)?([\\w:\\-._]+))([^>]*)>|((\\/)(([\\w:\\-._]*:)?([\\w:\\-._]+))\\s*>))([^<]*)'; //const tagsRegx = new RegExp("<(\\/?[\\w:\\-\._]+)([^>]*)>(\\s*"+cdataRegx+")*([^<]+)?","g");
 //const tagsRegx = new RegExp("<(\\/?)((\\w*:)?([\\w:\\-\._]+))([^>]*)>([^<]*)("+cdataRegx+"([^<]*))*([^<]+)?","g");
-
 //polyfill
+
 if (!Number.parseInt && window.parseInt) {
   Number.parseInt = window.parseInt;
 }
+
 if (!Number.parseFloat && window.parseFloat) {
   Number.parseFloat = window.parseFloat;
 }
@@ -40968,12 +40983,14 @@ var defaultOptions = {
   textNodeName: '#text',
   ignoreAttributes: true,
   ignoreNameSpace: false,
-  allowBooleanAttributes: false, //a tag can have attributes without any value
+  allowBooleanAttributes: false,
+  //a tag can have attributes without any value
   //ignoreRootElement : false,
   parseNodeValue: true,
   parseAttributeValue: false,
   arrayMode: false,
-  trimValues: true, //Trim string values of tag and attributes
+  trimValues: true,
+  //Trim string values of tag and attributes
   cdataTagName: false,
   cdataPositionChar: '\\c',
   localeRange: '',
@@ -40982,27 +40999,25 @@ var defaultOptions = {
   },
   attrValueProcessor: function attrValueProcessor(a) {
     return a;
-  }
-  //decodeStrict: false,
+  } //decodeStrict: false,
+
 };
-
 var defaultOptions_1 = defaultOptions;
-
 var props = ['attributeNamePrefix', 'attrNodeName', 'textNodeName', 'ignoreAttributes', 'ignoreNameSpace', 'allowBooleanAttributes', 'parseNodeValue', 'parseAttributeValue', 'arrayMode', 'trimValues', 'cdataTagName', 'cdataPositionChar', 'localeRange', 'tagValueProcessor', 'attrValueProcessor', 'parseTrueNumberOnly'];
 var props_1 = props;
 
 var getTraversalObj = function getTraversalObj(xmlData, options) {
-  options = buildOptions(options, defaultOptions, props);
-  //xmlData = xmlData.replace(/\r?\n/g, " ");//make it single line
+  options = buildOptions(options, defaultOptions, props); //xmlData = xmlData.replace(/\r?\n/g, " ");//make it single line
+
   xmlData = xmlData.replace(/<!--[\s\S]*?-->/g, ''); //Remove  comments
 
   var xmlObj = new xmlNode('!xml');
   var currentNode = xmlObj;
-
   regx = regx.replace(/\[\\w/g, '[' + options.localeRange + '\\w');
   var tagsRegx = new RegExp(regx, 'g');
   var tag = tagsRegx.exec(xmlData);
   var nextTag = tagsRegx.exec(xmlData);
+
   while (tag) {
     var tagType = checkForTagType(tag);
 
@@ -41018,10 +41033,10 @@ var getTraversalObj = function getTraversalObj(xmlData, options) {
         //add cdata node
         var childNode = new xmlNode(options.cdataTagName, currentNode, tag[3]);
         childNode.attrsMap = buildAttributesMap(tag[8], options);
-        currentNode.addChild(childNode);
-        //for backtracking
-        currentNode.val = util.getValue(currentNode.val) + options.cdataPositionChar;
-        //add rest value to parent node
+        currentNode.addChild(childNode); //for backtracking
+
+        currentNode.val = util.getValue(currentNode.val) + options.cdataPositionChar; //add rest value to parent node
+
         if (tag[14]) {
           currentNode.val += processTagValue(tag[14], options);
         }
@@ -41034,14 +41049,17 @@ var getTraversalObj = function getTraversalObj(xmlData, options) {
       }
 
       var _childNode = new xmlNode(options.ignoreNameSpace ? tag[7] : tag[5], currentNode, '');
+
       if (tag[8] && tag[8].length > 0) {
         tag[8] = tag[8].substr(0, tag[8].length - 1);
       }
+
       _childNode.attrsMap = buildAttributesMap(tag[8], options);
       currentNode.addChild(_childNode);
     } else {
       //TagType.OPENING
       var _childNode2 = new xmlNode(options.ignoreNameSpace ? tag[7] : tag[5], currentNode, processTagValue(tag[14], options));
+
       _childNode2.attrsMap = buildAttributesMap(tag[8], options);
       currentNode.addChild(_childNode2);
       currentNode = _childNode2;
@@ -41059,6 +41077,7 @@ function processTagValue(val, options) {
     if (options.trimValues) {
       val = val.trim();
     }
+
     val = options.tagValueProcessor(val);
     val = parseValue(val, options.parseNodeValue, options.parseTrueNumberOnly);
   }
@@ -41082,19 +41101,23 @@ function resolveNameSpace(tagname, options) {
   if (options.ignoreNameSpace) {
     var tags = tagname.split(':');
     var prefix = tagname.charAt(0) === '/' ? '/' : '';
+
     if (tags[0] === 'xmlns') {
       return '';
     }
+
     if (tags.length === 2) {
       tagname = prefix + tags[1];
     }
   }
+
   return tagname;
 }
 
 function parseValue(val, shouldParse, parseTrueNumberOnly) {
   if (shouldParse && typeof val === 'string') {
-    var parsed = void 0;
+    var parsed;
+
     if (val.trim() === '' || isNaN(val)) {
       parsed = val === 'true' ? true : val === 'false' ? false : val;
     } else {
@@ -41106,10 +41129,12 @@ function parseValue(val, shouldParse, parseTrueNumberOnly) {
       } else {
         parsed = Number.parseInt(val, 10);
       }
+
       if (parseTrueNumberOnly) {
         parsed = String(parsed) === val ? parsed : val;
       }
     }
+
     return parsed;
   } else {
     if (util.isExist(val)) {
@@ -41118,27 +41143,30 @@ function parseValue(val, shouldParse, parseTrueNumberOnly) {
       return '';
     }
   }
-}
-
-//TODO: change regex to capture NS
+} //TODO: change regex to capture NS
 //const attrsRegx = new RegExp("([\\w\\-\\.\\:]+)\\s*=\\s*(['\"])((.|\n)*?)\\2","gm");
+
+
 var attrsRegx = new RegExp('([^\\s=]+)\\s*(=\\s*([\'"])(.*?)\\3)?', 'g');
 
 function buildAttributesMap(attrStr, options) {
   if (!options.ignoreAttributes && typeof attrStr === 'string') {
-    attrStr = attrStr.replace(/\r?\n/g, ' ');
-    //attrStr = attrStr || attrStr.trim();
+    attrStr = attrStr.replace(/\r?\n/g, ' '); //attrStr = attrStr || attrStr.trim();
 
     var matches = util.getAllMatches(attrStr, attrsRegx);
     var len = matches.length; //don't make it inline
+
     var attrs = {};
+
     for (var i = 0; i < len; i++) {
       var attrName = resolveNameSpace(matches[i][1], options);
+
       if (attrName.length) {
         if (matches[i][4] !== undefined) {
           if (options.trimValues) {
             matches[i][4] = matches[i][4].trim();
           }
+
           matches[i][4] = options.attrValueProcessor(matches[i][4]);
           attrs[options.attributeNamePrefix + attrName] = parseValue(matches[i][4], options.parseAttributeValue, options.parseTrueNumberOnly);
         } else if (options.allowBooleanAttributes) {
@@ -41146,24 +41174,26 @@ function buildAttributesMap(attrStr, options) {
         }
       }
     }
+
     if (!Object.keys(attrs).length) {
       return;
     }
+
     if (options.attrNodeName) {
       var attrCollection = {};
       attrCollection[options.attrNodeName] = attrs;
       return attrCollection;
     }
+
     return attrs;
   }
 }
 
 var getTraversalObj_1 = getTraversalObj;
-
 var xmlstr2xmlnode = {
-	defaultOptions: defaultOptions_1,
-	props: props_1,
-	getTraversalObj: getTraversalObj_1
+  defaultOptions: defaultOptions_1,
+  props: props_1,
+  getTraversalObj: getTraversalObj_1
 };
 
 var char = function char(a) {
@@ -41175,17 +41205,14 @@ var chars = {
   missingChar: char(201),
   nilPremitive: char(175),
   missingPremitive: char(200),
-
   emptyChar: char(178),
-  emptyValue: char(177), //empty Premitive
-
+  emptyValue: char(177),
+  //empty Premitive
   boundryChar: char(179),
-
   objStart: char(198),
   arrStart: char(204),
   arrayEnd: char(185)
 };
-
 var charsArr = [chars.nilChar, chars.nilPremitive, chars.missingChar, chars.missingPremitive, chars.boundryChar, chars.emptyChar, chars.emptyValue, chars.arrayEnd, chars.objStart, chars.arrStart];
 
 var _e = function _e(node, e_schema, options) {
@@ -41198,13 +41225,15 @@ var _e = function _e(node, e_schema, options) {
     }
   } else {
     var hasValidData = hasData(node);
+
     if (hasValidData === true) {
       var str = '';
+
       if (Array.isArray(e_schema)) {
         //attributes can't be repeated. hence check in children tags only
         str += chars.arrStart;
-        var itemSchema = e_schema[0];
-        //var itemSchemaType = itemSchema;
+        var itemSchema = e_schema[0]; //var itemSchemaType = itemSchema;
+
         var arr_len = node.length;
 
         if (typeof itemSchema === 'string') {
@@ -41215,23 +41244,28 @@ var _e = function _e(node, e_schema, options) {
         } else {
           for (var _arr_i = 0; _arr_i < arr_len; _arr_i++) {
             var _r = _e(node[_arr_i], itemSchema, options);
+
             str = processValue(str, _r);
           }
         }
+
         str += chars.arrayEnd; //indicates that next item is not array item
       } else {
         //object
         str += chars.objStart;
         var keys = Object.keys(e_schema);
+
         if (Array.isArray(node)) {
           node = node[0];
         }
+
         for (var i in keys) {
-          var key = keys[i];
-          //a property defined in schema can be present either in attrsMap or children tags
+          var key = keys[i]; //a property defined in schema can be present either in attrsMap or children tags
           //options.textNodeName will not present in both maps, take it's value from val
           //options.attrNodeName will be present in attrsMap
+
           var _r2 = void 0;
+
           if (!options.ignoreAttributes && node.attrsMap && node.attrsMap[key]) {
             _r2 = _e(node.attrsMap[key], e_schema[key], options);
           } else if (key === options.textNodeName) {
@@ -41239,9 +41273,11 @@ var _e = function _e(node, e_schema, options) {
           } else {
             _r2 = _e(node.child[key], e_schema[key], options);
           }
+
           str = processValue(str, _r2);
         }
       }
+
       return str;
     } else {
       return hasValidData;
@@ -41249,14 +41285,19 @@ var _e = function _e(node, e_schema, options) {
   }
 };
 
-var getValue = function getValue(a /*, type*/) {
+var getValue = function getValue(a
+/*, type*/
+) {
   switch (a) {
     case undefined:
       return chars.missingPremitive;
+
     case null:
       return chars.nilPremitive;
+
     case '':
       return chars.emptyValue;
+
     default:
       return a;
   }
@@ -41266,6 +41307,7 @@ var processValue = function processValue(str, r) {
   if (!isAppChar(r[0]) && !isAppChar(str[str.length - 1])) {
     str += chars.boundryChar;
   }
+
   return str + r;
 };
 
@@ -41285,7 +41327,6 @@ function hasData(jObj) {
   }
 }
 
-
 var buildOptions$1 = util.buildOptions;
 
 var convert2nimn = function convert2nimn(node, e_schema, options) {
@@ -41294,42 +41335,41 @@ var convert2nimn = function convert2nimn(node, e_schema, options) {
 };
 
 var convert2nimn_1 = convert2nimn;
-
 var nimndata = {
-	convert2nimn: convert2nimn_1
+  convert2nimn: convert2nimn_1
 };
 
-var buildOptions$2 = util.buildOptions;
+var buildOptions$2 = util.buildOptions; //TODO: do it later
 
-
-//TODO: do it later
 var convertToJsonString = function convertToJsonString(node, options) {
   options = buildOptions$2(options, xmlstr2xmlnode.defaultOptions, xmlstr2xmlnode.props);
-
   options.indentBy = options.indentBy || '';
   return _cToJsonStr(node, options, 0);
 };
 
 var _cToJsonStr = function _cToJsonStr(node, options, level) {
-  var jObj = '{';
+  var jObj = '{'; //traver through all the children
 
-  //traver through all the children
   var keys = Object.keys(node.child);
 
   for (var index = 0; index < keys.length; index++) {
     var tagname = keys[index];
+
     if (node.child[tagname] && node.child[tagname].length > 1) {
       jObj += '"' + tagname + '" : [ ';
+
       for (var tag in node.child[tagname]) {
         jObj += _cToJsonStr(node.child[tagname][tag], options) + ' , ';
       }
+
       jObj = jObj.substr(0, jObj.length - 1) + ' ] '; //remove extra comma in last
     } else {
       jObj += '"' + tagname + '" : ' + _cToJsonStr(node.child[tagname][0], options) + ' ,';
     }
   }
-  util.merge(jObj, node.attrsMap);
-  //add attrsMap as new children
+
+  util.merge(jObj, node.attrsMap); //add attrsMap as new children
+
   if (util.isEmptyObject(jObj)) {
     return util.isExist(node.val) ? node.val : '';
   } else {
@@ -41338,11 +41378,13 @@ var _cToJsonStr = function _cToJsonStr(node, options, level) {
         jObj += '"' + options.textNodeName + '" : ' + stringval(node.val);
       }
     }
-  }
-  //add value
+  } //add value
+
+
   if (jObj[jObj.length - 1] === ',') {
     jObj = jObj.substr(0, jObj.length - 2);
   }
+
   return jObj + '}';
 };
 
@@ -41355,42 +41397,42 @@ function stringval(v) {
 }
 
 var convertToJsonString_1 = convertToJsonString;
-
 var node2json_str = {
-	convertToJsonString: convertToJsonString_1
+  convertToJsonString: convertToJsonString_1
 };
 
 var defaultOptions$1 = {
-  allowBooleanAttributes: false, //A tag can have attributes without any value
+  allowBooleanAttributes: false,
+  //A tag can have attributes without any value
   localeRange: 'a-zA-Z'
 };
+var props$1 = ['allowBooleanAttributes', 'localeRange']; //const tagsPattern = new RegExp("<\\/?([\\w:\\-_\.]+)\\s*\/?>","g");
 
-var props$1 = ['allowBooleanAttributes', 'localeRange'];
-
-//const tagsPattern = new RegExp("<\\/?([\\w:\\-_\.]+)\\s*\/?>","g");
-var validate = function (xmlData, options) {
-  options = util.buildOptions(options, defaultOptions$1, props$1);
-
-  //xmlData = xmlData.replace(/(\r\n|\n|\r)/gm,"");//make it single line
+var validate = function validate(xmlData, options) {
+  options = util.buildOptions(options, defaultOptions$1, props$1); //xmlData = xmlData.replace(/(\r\n|\n|\r)/gm,"");//make it single line
   //xmlData = xmlData.replace(/(^\s*<\?xml.*?\?>)/g,"");//Remove XML starting tag
   //xmlData = xmlData.replace(/(<!DOCTYPE[\s\w\"\.\/\-\:]+(\[.*\])*\s*>)/g,"");//Remove DOCTYPE
 
   var tags = [];
   var tagFound = false;
-  if (xmlData[0] === '\uFEFF') {
+
+  if (xmlData[0] === "\uFEFF") {
     // check for byte order mark (BOM)
     xmlData = xmlData.substr(1);
   }
+
   var regxAttrName = new RegExp('^[_w][\\w\\-.:]*$'.replace('_w', '_' + options.localeRange));
   var regxTagName = new RegExp('^([w]|_)[\\w.\\-_:]*'.replace('([w', '([' + options.localeRange));
+
   for (var i = 0; i < xmlData.length; i++) {
     if (xmlData[i] === '<') {
       //starting of tag
       //read until you reach to '>' avoiding any '>' in attribute value
-
       i++;
+
       if (xmlData[i] === '?') {
         i = readPI(xmlData, ++i);
+
         if (i.err) {
           return i;
         }
@@ -41399,32 +41441,48 @@ var validate = function (xmlData, options) {
         continue;
       } else {
         var closingTag = false;
+
         if (xmlData[i] === '/') {
           //closing tag
           closingTag = true;
           i++;
-        }
-        //read tagname
+        } //read tagname
+
+
         var tagName = '';
+
         for (; i < xmlData.length && xmlData[i] !== '>' && xmlData[i] !== ' ' && xmlData[i] !== '\t'; i++) {
           tagName += xmlData[i];
         }
-        tagName = tagName.trim();
-        //console.log(tagName);
+
+        tagName = tagName.trim(); //console.log(tagName);
 
         if (tagName[tagName.length - 1] === '/') {
           //self closing tag without attributes
           tagName = tagName.substring(0, tagName.length - 1);
           continue;
         }
+
         if (!validateTagName(tagName, regxTagName)) {
-          return { err: { code: 'InvalidTag', msg: 'Tag ' + tagName + ' is an invalid name.' } };
+          return {
+            err: {
+              code: 'InvalidTag',
+              msg: 'Tag ' + tagName + ' is an invalid name.'
+            }
+          };
         }
 
         var result = readAttributeStr(xmlData, i);
+
         if (result === false) {
-          return { err: { code: 'InvalidAttr', msg: 'Attributes for ' + tagName + ' have open quote' } };
+          return {
+            err: {
+              code: 'InvalidAttr',
+              msg: 'Attributes for ' + tagName + ' have open quote'
+            }
+          };
         }
+
         var attrStr = result.value;
         i = result.index;
 
@@ -41432,36 +41490,45 @@ var validate = function (xmlData, options) {
           //self closing tag
           attrStr = attrStr.substring(0, attrStr.length - 1);
           var isValid = validateAttributeString(attrStr, options, regxAttrName);
+
           if (isValid === true) {
-            tagFound = true;
-            //continue; //text may presents after self closing tag
+            tagFound = true; //continue; //text may presents after self closing tag
           } else {
             return isValid;
           }
         } else if (closingTag) {
           if (attrStr.trim().length > 0) {
             return {
-              err: { code: 'InvalidTag', msg: 'closing tag ' + tagName + " can't have attributes or invalid starting." }
+              err: {
+                code: 'InvalidTag',
+                msg: 'closing tag ' + tagName + " can't have attributes or invalid starting."
+              }
             };
           } else {
             var otg = tags.pop();
+
             if (tagName !== otg) {
               return {
-                err: { code: 'InvalidTag', msg: 'closing tag ' + otg + ' is expected inplace of ' + tagName + '.' }
+                err: {
+                  code: 'InvalidTag',
+                  msg: 'closing tag ' + otg + ' is expected inplace of ' + tagName + '.'
+                }
               };
             }
           }
         } else {
           var _isValid = validateAttributeString(attrStr, options, regxAttrName);
+
           if (_isValid !== true) {
             return _isValid;
           }
+
           tags.push(tagName);
           tagFound = true;
-        }
-
-        //skip tag text value
+        } //skip tag text value
         //It may include comments and CDATA value
+
+
         for (i++; i < xmlData.length; i++) {
           if (xmlData[i] === '<') {
             if (xmlData[i + 1] === '!') {
@@ -41474,6 +41541,8 @@ var validate = function (xmlData, options) {
             }
           }
         } //end of reading tag text value
+
+
         if (xmlData[i] === '<') {
           i--;
         }
@@ -41482,34 +41551,56 @@ var validate = function (xmlData, options) {
       if (xmlData[i] === ' ' || xmlData[i] === '\t' || xmlData[i] === '\n' || xmlData[i] === '\r') {
         continue;
       }
-      return { err: { code: 'InvalidChar', msg: 'char ' + xmlData[i] + ' is not expected .' } };
+
+      return {
+        err: {
+          code: 'InvalidChar',
+          msg: 'char ' + xmlData[i] + ' is not expected .'
+        }
+      };
     }
   }
 
   if (!tagFound) {
-    return { err: { code: 'InvalidXml', msg: 'Start tag expected.' } };
+    return {
+      err: {
+        code: 'InvalidXml',
+        msg: 'Start tag expected.'
+      }
+    };
   } else if (tags.length > 0) {
     return {
-      err: { code: 'InvalidXml', msg: 'Invalid ' + JSON.stringify(tags, null, 4).replace(/\r?\n/g, '') + ' found.' }
+      err: {
+        code: 'InvalidXml',
+        msg: 'Invalid ' + JSON.stringify(tags, null, 4).replace(/\r?\n/g, '') + ' found.'
+      }
     };
   }
 
   return true;
 };
-
 /**
  * Read Processing insstructions and skip
  * @param {*} xmlData
  * @param {*} i
  */
+
+
 function readPI(xmlData, i) {
   var start = i;
+
   for (; i < xmlData.length; i++) {
     if (xmlData[i] == '?' || xmlData[i] == ' ') {
       //tagname
       var tagname = xmlData.substr(start, i - start);
+
       if (i > 5 && tagname === 'xml') {
-        return { err: { code: 'InvalidXml', msg: 'XML declaration allowed only at the start of the document.' } };
+        return {
+          err: {
+            code: 'InvalidXml',
+            msg: 'XML declaration allowed only at the start of the document.'
+          }
+        };
       } else if (xmlData[i] == '?' && xmlData[i + 1] == '>') {
         //check if valid attribut string
         i++;
@@ -41519,6 +41610,7 @@ function readPI(xmlData, i) {
       }
     }
   }
+
   return i;
 }
 
@@ -41533,11 +41625,13 @@ function readCommentAndCDATA(xmlData, i) {
     }
   } else if (xmlData.length > i + 8 && xmlData[i + 1] === 'D' && xmlData[i + 2] === 'O' && xmlData[i + 3] === 'C' && xmlData[i + 4] === 'T' && xmlData[i + 5] === 'Y' && xmlData[i + 6] === 'P' && xmlData[i + 7] === 'E') {
     var angleBracketsCount = 1;
+
     for (i += 8; i < xmlData.length; i++) {
       if (xmlData[i] === '<') {
         angleBracketsCount++;
       } else if (xmlData[i] === '>') {
         angleBracketsCount--;
+
         if (angleBracketsCount === 0) {
           break;
         }
@@ -41557,15 +41651,16 @@ function readCommentAndCDATA(xmlData, i) {
 
 var doubleQuote = '"';
 var singleQuote = "'";
-
 /**
  * Keep reading xmlData until '<' is found outside the attribute value.
  * @param {string} xmlData
  * @param {number} i
  */
+
 function readAttributeStr(xmlData, i) {
   var attrStr = '';
   var startChar = '';
+
   for (; i < xmlData.length; i++) {
     if (xmlData[i] === doubleQuote || xmlData[i] === singleQuote) {
       if (startChar === '') {
@@ -41581,67 +41676,90 @@ function readAttributeStr(xmlData, i) {
         break;
       }
     }
+
     attrStr += xmlData[i];
   }
+
   if (startChar !== '') {
     return false;
   }
 
-  return { value: attrStr, index: i };
+  return {
+    value: attrStr,
+    index: i
+  };
 }
-
 /**
  * Select all the attributes whether valid or invalid.
  */
-var validAttrStrRegxp = new RegExp('(\\s*)([^\\s=]+)(\\s*=)?(\\s*([\'"])(([\\s\\S])*?)\\5)?', 'g');
 
-//attr, ="sd", a="amit's", a="sd"b="saf", ab  cd=""
+
+var validAttrStrRegxp = new RegExp('(\\s*)([^\\s=]+)(\\s*=)?(\\s*([\'"])(([\\s\\S])*?)\\5)?', 'g'); //attr, ="sd", a="amit's", a="sd"b="saf", ab  cd=""
 
 function validateAttributeString(attrStr, options, regxAttrName) {
   //console.log("start:"+attrStr+":end");
-
   //if(attrStr.trim().length === 0) return true; //empty string
-
   var matches = util.getAllMatches(attrStr, validAttrStrRegxp);
   var attrNames = {};
 
   for (var i = 0; i < matches.length; i++) {
     //console.log(matches[i]);
-
     if (matches[i][1].length === 0) {
       //nospace before attribute name: a="sd"b="saf"
-      return { err: { code: 'InvalidAttr', msg: 'attribute ' + matches[i][2] + ' has no space in starting.' } };
+      return {
+        err: {
+          code: 'InvalidAttr',
+          msg: 'attribute ' + matches[i][2] + ' has no space in starting.'
+        }
+      };
     } else if (matches[i][3] === undefined && !options.allowBooleanAttributes) {
       //independent attribute: ab
-      return { err: { code: 'InvalidAttr', msg: 'boolean attribute ' + matches[i][2] + ' is not allowed.' } };
+      return {
+        err: {
+          code: 'InvalidAttr',
+          msg: 'boolean attribute ' + matches[i][2] + ' is not allowed.'
+        }
+      };
     }
     /* else if(matches[i][6] === undefined){//attribute without value: ab=
                     return { err: { code:"InvalidAttr",msg:"attribute " + matches[i][2] + " has no value assigned."}};
                 } */
+
+
     var attrName = matches[i][2];
+
     if (!validateAttrName(attrName, regxAttrName)) {
-      return { err: { code: 'InvalidAttr', msg: 'attribute ' + attrName + ' is an invalid name.' } };
+      return {
+        err: {
+          code: 'InvalidAttr',
+          msg: 'attribute ' + attrName + ' is an invalid name.'
+        }
+      };
     }
+
     if (!attrNames.hasOwnProperty(attrName)) {
       //check for duplicate attribute.
       attrNames[attrName] = 1;
     } else {
-      return { err: { code: 'InvalidAttr', msg: 'attribute ' + attrName + ' is repeated.' } };
+      return {
+        err: {
+          code: 'InvalidAttr',
+          msg: 'attribute ' + attrName + ' is repeated.'
+        }
+      };
     }
   }
 
   return true;
-}
+} // const validAttrRegxp = /^[_a-zA-Z][\w\-.:]*$/;
 
-// const validAttrRegxp = /^[_a-zA-Z][\w\-.:]*$/;
 
 function validateAttrName(attrName, regxAttrName) {
   // const validAttrRegxp = new RegExp(regxAttrName);
   return util.doesMatch(attrName, regxAttrName);
-}
-
-//const startsWithXML = new RegExp("^[Xx][Mm][Ll]");
+} //const startsWithXML = new RegExp("^[Xx][Mm][Ll]");
 //  startsWith = /^([a-zA-Z]|_)[\w.\-_:]*/;
+
 
 function validateTagName(tagname, regxTagName) {
   /*if(util.doesMatch(tagname,startsWithXML)) return false;
@@ -41650,15 +41768,24 @@ function validateTagName(tagname, regxTagName) {
 }
 
 var validator = {
-	validate: validate
+  validate: validate
 };
 
-//parse Empty Node as self closing node
+function _typeof(obj) {
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof = function (obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof = function (obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+  return _typeof(obj);
+}
 
 var buildOptions$3 = util.buildOptions;
-
 var defaultOptions$2 = {
   attributeNamePrefix: '@_',
   attrNodeName: false,
@@ -41676,37 +41803,44 @@ var defaultOptions$2 = {
     return a;
   }
 };
-
 var props$2 = ['attributeNamePrefix', 'attrNodeName', 'textNodeName', 'ignoreAttributes', 'cdataTagName', 'cdataPositionChar', 'format', 'indentBy', 'supressEmptyNode', 'tagValueProcessor', 'attrValueProcessor'];
 
 function Parser(options) {
   this.options = buildOptions$3(options, defaultOptions$2, props$2);
+
   if (this.options.ignoreAttributes || this.options.attrNodeName) {
-    this.isAttribute = function () /*a*/{
+    this.isAttribute = function ()
+    /*a*/
+    {
       return false;
     };
   } else {
     this.attrPrefixLen = this.options.attributeNamePrefix.length;
     this.isAttribute = isAttribute;
   }
+
   if (this.options.cdataTagName) {
     this.isCDATA = isCDATA;
   } else {
-    this.isCDATA = function () /*a*/{
+    this.isCDATA = function ()
+    /*a*/
+    {
       return false;
     };
   }
+
   this.replaceCDATAstr = replaceCDATAstr;
   this.replaceCDATAarr = replaceCDATAarr;
 
   if (this.options.format) {
-    this.indentate = indentate$1;
+    this.indentate = indentate;
     this.tagEndChar = '>\n';
     this.newLine = '\n';
   } else {
     this.indentate = function () {
       return '';
     };
+
     this.tagEndChar = '>';
     this.newLine = '';
   }
@@ -41732,13 +41866,16 @@ Parser.prototype.j2x = function (jObj, level) {
   var val = '';
   var keys = Object.keys(jObj);
   var len = keys.length;
+
   for (var i = 0; i < len; i++) {
     var key = keys[i];
+
     if (typeof jObj[key] === 'undefined') ; else if (jObj[key] === null) {
       val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
     } else if (_typeof(jObj[key]) !== 'object') {
       //premitive type
       var attr = this.isAttribute(key);
+
       if (attr) {
         attrStr += ' ' + attr + '="' + this.options.attrValueProcessor('' + jObj[key]) + '"';
       } else if (this.isCDATA(key)) {
@@ -41761,6 +41898,7 @@ Parser.prototype.j2x = function (jObj, level) {
       //repeated nodes
       if (this.isCDATA(key)) {
         val += this.indentate(level);
+
         if (jObj[this.options.textNodeName]) {
           val += this.replaceCDATAarr(jObj[this.options.textNodeName], jObj[key]);
         } else {
@@ -41769,11 +41907,13 @@ Parser.prototype.j2x = function (jObj, level) {
       } else {
         //nested nodes
         var arrLen = jObj[key].length;
+
         for (var j = 0; j < arrLen; j++) {
           var item = jObj[key][j];
+
           if (typeof item === 'undefined') ; else if (item === null) {
             val += this.indentate(level) + '<' + key + '/' + this.tagEndChar;
-          } else if ((typeof item === 'undefined' ? 'undefined' : _typeof(item)) === 'object') {
+          } else if (_typeof(item) === 'object') {
             var result = this.j2x(item, level + 1);
             val += this.buildObjNode(result.val, key, result.attrStr, level);
           } else {
@@ -41786,20 +41926,27 @@ Parser.prototype.j2x = function (jObj, level) {
       if (this.options.attrNodeName && key === this.options.attrNodeName) {
         var Ks = Object.keys(jObj[key]);
         var L = Ks.length;
+
         for (var _j = 0; _j < L; _j++) {
           attrStr += ' ' + Ks[_j] + '="' + this.options.attrValueProcessor('' + jObj[key][Ks[_j]]) + '"';
         }
       } else {
         var _result = this.j2x(jObj[key], level + 1);
+
         val += this.buildObjNode(_result.val, key, _result.attrStr, level);
       }
     }
   }
-  return { attrStr: attrStr, val: val };
+
+  return {
+    attrStr: attrStr,
+    val: val
+  };
 };
 
 function replaceCDATAstr(str, cdata) {
   str = this.options.tagValueProcessor('' + str);
+
   if (this.options.cdataPositionChar === '' || str === '') {
     return str + '<![CDATA[' + cdata + ']]' + this.tagEndChar;
   } else {
@@ -41809,25 +41956,25 @@ function replaceCDATAstr(str, cdata) {
 
 function replaceCDATAarr(str, cdata) {
   str = this.options.tagValueProcessor('' + str);
+
   if (this.options.cdataPositionChar === '' || str === '') {
     return str + '<![CDATA[' + cdata.join(']]><![CDATA[') + ']]' + this.tagEndChar;
   } else {
     for (var v in cdata) {
       str = str.replace(this.options.cdataPositionChar, '<![CDATA[' + cdata[v] + ']]>');
     }
+
     return str + this.newLine;
   }
 }
 
 function buildObjectNode(val, key, attrStr, level) {
   if (attrStr && !val.includes('<')) {
-    return this.indentate(level) + '<' + key + attrStr + '>' + val +
-    //+ this.newLine
+    return this.indentate(level) + '<' + key + attrStr + '>' + val + //+ this.newLine
     // + this.indentate(level)
     '</' + key + this.tagEndChar;
   } else {
-    return this.indentate(level) + '<' + key + attrStr + this.tagEndChar + val +
-    //+ this.newLine
+    return this.indentate(level) + '<' + key + attrStr + this.tagEndChar + val + //+ this.newLine
     this.indentate(level) + '</' + key + this.tagEndChar;
   }
 }
@@ -41836,8 +41983,7 @@ function buildEmptyObjNode(val, key, attrStr, level) {
   if (val !== '') {
     return this.buildObjectNode(val, key, attrStr, level);
   } else {
-    return this.indentate(level) + '<' + key + attrStr + '/' + this.tagEndChar;
-    //+ this.newLine
+    return this.indentate(level) + '<' + key + attrStr + '/' + this.tagEndChar; //+ this.newLine
   }
 }
 
@@ -41853,11 +41999,13 @@ function buildEmptyTextNode(val, key, attrStr, level) {
   }
 }
 
-function indentate$1(level) {
+function indentate(level) {
   return this.options.indentBy.repeat(level);
 }
 
-function isAttribute(name /*, options*/) {
+function isAttribute(name
+/*, options*/
+) {
   if (name.startsWith(this.options.attributeNamePrefix)) {
     return name.substr(this.attrPrefixLen);
   } else {
@@ -41867,34 +42015,33 @@ function isAttribute(name /*, options*/) {
 
 function isCDATA(name) {
   return name === this.options.cdataTagName;
-}
-
-//formatting
+} //formatting
 //indentation
 //\n after each closing or self closing tag
+
 
 var json2xml = Parser;
 
 var parser = createCommonjsModule(function (module, exports) {
 
+  var x2xmlnode = xmlstr2xmlnode;
+  var buildOptions = util.buildOptions;
 
+  exports.parse = function (xmlData, options) {
+    options = buildOptions(options, x2xmlnode.defaultOptions, x2xmlnode.props);
+    return node2json.convertToJson(xmlstr2xmlnode.getTraversalObj(xmlData, options), options);
+  };
 
-var x2xmlnode = xmlstr2xmlnode;
-var buildOptions = util.buildOptions;
+  exports.convertTonimn = nimndata.convert2nimn;
+  exports.getTraversalObj = xmlstr2xmlnode.getTraversalObj;
+  exports.convertToJson = node2json.convertToJson;
+  exports.convertToJsonString = node2json_str.convertToJsonString;
+  exports.validate = validator.validate;
+  exports.j2xParser = json2xml;
 
-exports.parse = function (xmlData, options) {
-  options = buildOptions(options, x2xmlnode.defaultOptions, x2xmlnode.props);
-  return node2json.convertToJson(xmlstr2xmlnode.getTraversalObj(xmlData, options), options);
-};
-exports.convertTonimn = nimndata.convert2nimn;
-exports.getTraversalObj = xmlstr2xmlnode.getTraversalObj;
-exports.convertToJson = node2json.convertToJson;
-exports.convertToJsonString = node2json_str.convertToJsonString;
-exports.validate = validator.validate;
-exports.j2xParser = json2xml;
-exports.parseToNimn = function (xmlData, schema, options) {
-  return exports.convertTonimn(exports.getTraversalObj(xmlData, options), schema, options);
-};
+  exports.parseToNimn = function (xmlData, schema, options) {
+    return exports.convertTonimn(exports.getTraversalObj(xmlData, options), schema, options);
+  };
 });
 var parser_1 = parser.parse;
 var parser_2 = parser.convertTonimn;
