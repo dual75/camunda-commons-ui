@@ -1,4 +1,21 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 function roundUp(v, x) {
@@ -1106,6 +1123,23 @@ proto.remove = function() {
 };
 
 },{}],2:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 var AbbreviateNumberFilter = function() {
@@ -1127,33 +1161,33 @@ var AbbreviateNumberFilter = function() {
   };
 
   function abbreviateNumber(number, decimal) {
-      // 2 decimal places => 100, 3 => 1000, etc
+    // 2 decimal places => 100, 3 => 1000, etc
     decimal = Math.pow(10, decimal);
 
-      // Enumerate number abbreviations according to https://en.wikipedia.org/wiki/Yotta-
+    // Enumerate number abbreviations according to https://en.wikipedia.org/wiki/Yotta-
     var abbreviations = [ 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' ];
 
-      // Go through the array backwards, so we do the largest first
+    // Go through the array backwards, so we do the largest first
     for (var i = abbreviations.length - 1; i >= 0; i--) {
-        // Convert array index to "1000", "1000000", etc
+      // Convert array index to "1000", "1000000", etc
       var size = Math.pow(10, (i + 1) * 3);
 
-        // If the number is bigger or equal do the abbreviation
+      // If the number is bigger or equal do the abbreviation
       if(size <= number) {
-          // Here, we multiply by decimal, round, and then divide by decPlaces.
-          // This gives us nice rounding to a particular decimal place.
+        // Here, we multiply by decimal, round, and then divide by decPlaces.
+        // This gives us nice rounding to a particular decimal place.
         number = Math.round(number * decimal / size) / decimal;
 
-          // Handle special case where we round up to the next abbreviation
+        // Handle special case where we round up to the next abbreviation
         if(number == 1000 && i < abbreviations.length - 1) {
           number = 1;
           i++;
         }
 
-          // Add the letter for the abbreviation
+        // Add the letter for the abbreviation
         number += abbreviations[i];
 
-          // We are done... stop
+        // We are done... stop
         return number;
       }
     }
@@ -1163,6 +1197,23 @@ var AbbreviateNumberFilter = function() {
 module.exports = AbbreviateNumberFilter;
 
 },{}],3:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 var throttle = require('lodash').throttle;
@@ -1275,6 +1326,23 @@ module.exports = ['$window', function($window) {
 
 },{"./../../chart/line":1,"./../../filter/abbreviateNumber":2,"camunda-bpm-sdk-js/vendor/moment":10,"lodash":12}],4:[function(require,module,exports){
 (function (Buffer){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 var angular = require('camunda-bpm-sdk-js/vendor/angular'),
@@ -39727,11 +39795,45 @@ function fromByteArray (uint8) {
 }
 
 },{}],9:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 module.exports = require('angular');
 
 },{"angular":6}],10:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 module.exports = require('moment');

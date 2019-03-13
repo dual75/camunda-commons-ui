@@ -1,4 +1,21 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 
@@ -142,7 +159,7 @@ varUtils.validate = function($scope) {
     }
 
     if($scope.valid) {
-        // save the variable in the appropriate type
+      // save the variable in the appropriate type
       if ($scope.variable.type &&
             $scope.variable.value !== null &&
             $scope.isPrimitive($scope.variable.type)) {
@@ -153,11 +170,11 @@ varUtils.validate = function($scope) {
         }
         else {
           newTyped = $scope.variable.value ?
-                        $scope.variable.value !== 'false' :
-                        false;
+            $scope.variable.value !== 'false' :
+            false;
         }
 
-          // only change value if newType has different type, to avoid infinite recursion
+        // only change value if newType has different type, to avoid infinite recursion
         if(typeof $scope.variable.value !== typeof newTyped) {
           $scope.variable.value = newTyped;
         }
@@ -169,6 +186,23 @@ varUtils.validate = function($scope) {
 module.exports = varUtils;
 
 },{"camunda-bpm-sdk-js/lib/forms/type-util":8,"camunda-bpm-sdk-js/vendor/angular":9}],2:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 var typeUtils = require('camunda-bpm-sdk-js/lib/forms/type-util');
@@ -204,6 +238,23 @@ module.exports = [function() {
 }];
 
 },{"camunda-bpm-sdk-js/lib/forms/type-util":8}],3:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 
@@ -314,8 +365,8 @@ module.exports = [
               backup = $scope.variable.value;
 
               $scope.variable.value = $scope.variable.value === 'false' ?
-                                      false :
-                                      !!$scope.variable.value;
+                false :
+                !!$scope.variable.value;
             }
           }
           else if (previous === 'Boolean') {
@@ -355,16 +406,33 @@ module.exports = [
               readonly: function() { return $scope.display; }
             }
           })
-          .result.then(function(result) {
-            $scope.variable.value = result.value;
-            $scope.variable.valueInfo = result.valueInfo;
-          }).catch(angular.noop);
+            .result.then(function(result) {
+              $scope.variable.value = result.value;
+              $scope.variable.valueInfo = result.valueInfo;
+            }).catch(angular.noop);
         };
       }
     };
   }];
 
 },{"./cam-variable-utils":1,"camunda-bpm-sdk-js/vendor/angular":9}],4:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 var angular = require('camunda-bpm-sdk-js/vendor/angular'),
@@ -40678,6 +40746,23 @@ require('./angular');
 module.exports = angular;
 
 },{"./angular":6}],8:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 var INTEGER_PATTERN = /^-?[\d]+$/;
@@ -40785,6 +40870,23 @@ module.exports = {
 };
 
 },{"../../vendor/fast-xml-parser":10}],9:[function(require,module,exports){
+/*
+ * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
+ * under one or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information regarding copyright
+ * ownership. Camunda licenses this file to you under the Apache License,
+ * Version 2.0; you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict';
 
 module.exports = require('angular');
