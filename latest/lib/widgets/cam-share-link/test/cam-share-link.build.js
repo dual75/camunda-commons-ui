@@ -1,4 +1,5 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function (__dirname){
 /*
  * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
@@ -18,9 +19,9 @@
 
 'use strict';
 
+var fs = require('fs');
 
-
-var template = "<div cam-widget-clipboard=\"getLink()\" icon=\"glyphicon-link\" tooltip-text=\"{{ 'CAM_WIDGET_COPY_LINK' | translate }}\">\n</div>\n";
+var template = fs.readFileSync(__dirname + '/cam-share-link.html', 'utf8');
 
 module.exports = ['$location', function($location) {
   return {
@@ -32,7 +33,8 @@ module.exports = ['$location', function($location) {
   };
 }];
 
-},{}],2:[function(require,module,exports){
+}).call(this,"/lib/widgets/cam-share-link")
+},{"fs":7}],2:[function(require,module,exports){
 /*
  * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
@@ -71,7 +73,8 @@ angular.element(document).ready(function() {
   angular.bootstrap(document.body, [shareModule.name, 'pascalprecht.translate']);
 });
 
-},{"../../../../vendor/ui-bootstrap-tpls-2.5.0-camunda":9,"../../clipboard/cam-widget-clipboard":3,"../cam-share-link":1,"angular-translate":4,"camunda-bpm-sdk-js/vendor/angular":7}],3:[function(require,module,exports){
+},{"../../../../vendor/ui-bootstrap-tpls-2.5.0-camunda":10,"../../clipboard/cam-widget-clipboard":3,"../cam-share-link":1,"angular-translate":4,"camunda-bpm-sdk-js/vendor/angular":8}],3:[function(require,module,exports){
+(function (__dirname){
 /*
  * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
@@ -90,10 +93,10 @@ angular.element(document).ready(function() {
  */
 
 'use strict';
-
+var fs = require('fs');
 var Clipboard = require('clipboard');
 
-var template = "<span ng-transclude></span>\n<a ng-if=\"!noTooltip\"\n   uib-tooltip=\"{{ tooltipText }}\"\n   tooltip-append-to-body=\"true\"\n   ng-class=\"{'copy-ok': copyStatus === true, 'copy-error': copyStatus === false}\"\n   class=\"glyphicon {{icon}}\"></a>\n<a ng-if=\"noTooltip\"\n   ng-class=\"{'copy-ok': copyStatus === true, 'copy-error': copyStatus === false}\"\n   class=\"glyphicon {{icon}}\"></a>\n";
+var template = fs.readFileSync(__dirname + '/cam-widget-clipboard.html', 'utf8');
 
 module.exports = ['$timeout', '$translate', function($timeout, $translate) {
   return {
@@ -160,7 +163,8 @@ module.exports = ['$timeout', '$translate', function($timeout, $translate) {
   };
 }];
 
-},{"clipboard":8}],4:[function(require,module,exports){
+}).call(this,"/lib/widgets/clipboard")
+},{"clipboard":9,"fs":7}],4:[function(require,module,exports){
 /*!
  * angular-translate - v2.18.1 - 2018-05-19
  * 
@@ -40386,6 +40390,8 @@ require('./angular');
 module.exports = angular;
 
 },{"./angular":5}],7:[function(require,module,exports){
+
+},{}],8:[function(require,module,exports){
 /*
  * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
@@ -40407,7 +40413,7 @@ module.exports = angular;
 
 module.exports = require('angular');
 
-},{"angular":6}],8:[function(require,module,exports){
+},{"angular":6}],9:[function(require,module,exports){
 /*!
  * clipboard.js v2.0.4
  * https://zenorocha.github.io/clipboard.js
@@ -41386,7 +41392,7 @@ module.exports = closest;
 /***/ })
 /******/ ]);
 });
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 /*
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
