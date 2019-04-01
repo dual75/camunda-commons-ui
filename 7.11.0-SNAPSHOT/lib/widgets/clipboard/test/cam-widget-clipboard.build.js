@@ -1,5 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-(function (__dirname){
 /*
  * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
@@ -18,10 +17,10 @@
  */
 
 'use strict';
-var fs = require('fs');
+
 var Clipboard = require('clipboard');
 
-var template = fs.readFileSync(__dirname + '/cam-widget-clipboard.html', 'utf8');
+var template = "<span ng-transclude></span>\n<a ng-if=\"!noTooltip\"\n   uib-tooltip=\"{{ tooltipText }}\"\n   tooltip-append-to-body=\"true\"\n   ng-class=\"{'copy-ok': copyStatus === true, 'copy-error': copyStatus === false}\"\n   class=\"glyphicon {{icon}}\"></a>\n<a ng-if=\"noTooltip\"\n   ng-class=\"{'copy-ok': copyStatus === true, 'copy-error': copyStatus === false}\"\n   class=\"glyphicon {{icon}}\"></a>\n";
 
 module.exports = ['$timeout', '$translate', function($timeout, $translate) {
   return {
@@ -88,8 +87,7 @@ module.exports = ['$timeout', '$translate', function($timeout, $translate) {
   };
 }];
 
-}).call(this,"/lib/widgets/clipboard")
-},{"clipboard":7,"fs":5}],2:[function(require,module,exports){
+},{"clipboard":6}],2:[function(require,module,exports){
 /*
  * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
@@ -136,7 +134,7 @@ angular.element(document).ready(function() {
   angular.bootstrap(document.body, [testModule.name]);
 });
 
-},{"../../../../vendor/ui-bootstrap-tpls-2.5.0-camunda":8,"../cam-widget-clipboard":1,"camunda-bpm-sdk-js/vendor/angular":6}],3:[function(require,module,exports){
+},{"../../../../vendor/ui-bootstrap-tpls-2.5.0-camunda":7,"../cam-widget-clipboard":1,"camunda-bpm-sdk-js/vendor/angular":5}],3:[function(require,module,exports){
 /**
  * @license AngularJS v1.7.8
  * (c) 2010-2018 Google, Inc. http://angularjs.org
@@ -36577,8 +36575,6 @@ require('./angular');
 module.exports = angular;
 
 },{"./angular":3}],5:[function(require,module,exports){
-
-},{}],6:[function(require,module,exports){
 /*
  * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
@@ -36600,7 +36596,7 @@ module.exports = angular;
 
 module.exports = require('angular');
 
-},{"angular":4}],7:[function(require,module,exports){
+},{"angular":4}],6:[function(require,module,exports){
 /*!
  * clipboard.js v2.0.4
  * https://zenorocha.github.io/clipboard.js
@@ -37579,7 +37575,7 @@ module.exports = closest;
 /***/ })
 /******/ ]);
 });
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 /*
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/

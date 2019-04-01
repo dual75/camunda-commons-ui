@@ -1,5 +1,4 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-(function (__dirname){
 /*
  * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
@@ -18,11 +17,11 @@
  */
 
 'use strict';
-var fs = require('fs');
+
 
 var angular = require('camunda-bpm-sdk-js/vendor/angular'),
 
-    template = fs.readFileSync(__dirname + '/cam-widget-loader.html', 'utf8');
+    template = "<div class=\"loader-state loaded\"\n     ng-show=\"loadingState === 'LOADED'\"\n     ng-transclude></div>\n\n<div class=\"loader-state loading\"\n     ng-if=\"loadingState === 'LOADING'\">\n  <span class=\"glyphicon glyphicon-refresh animate-spin\"></span>\n  {{ textLoading }}\n</div>\n\n<div class=\"loader-state empty\"\n     ng-if=\"loadingState === 'EMPTY'\">\n  {{ textEmpty }}\n</div>\n\n<div uib-alert class=\"loader-state alert alert-danger\"\n     ng-if=\"loadingState === 'ERROR'\">\n  {{ textError }}\n</div>\n";
 
 module.exports = [function() {
   return {
@@ -49,8 +48,7 @@ module.exports = [function() {
   };
 }];
 
-}).call(this,"/lib/widgets/loader")
-},{"camunda-bpm-sdk-js/vendor/angular":6,"fs":5}],2:[function(require,module,exports){
+},{"camunda-bpm-sdk-js/vendor/angular":5}],2:[function(require,module,exports){
 /*
  * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
@@ -112,7 +110,7 @@ angular.element(document).ready(function() {
   angular.bootstrap(document.body, [testModule.name]);
 });
 
-},{"../../../../vendor/ui-bootstrap-tpls-2.5.0-camunda":7,"../cam-widget-loader":1,"camunda-bpm-sdk-js/vendor/angular":6}],3:[function(require,module,exports){
+},{"../../../../vendor/ui-bootstrap-tpls-2.5.0-camunda":6,"../cam-widget-loader":1,"camunda-bpm-sdk-js/vendor/angular":5}],3:[function(require,module,exports){
 /**
  * @license AngularJS v1.7.8
  * (c) 2010-2018 Google, Inc. http://angularjs.org
@@ -36553,8 +36551,6 @@ require('./angular');
 module.exports = angular;
 
 },{"./angular":3}],5:[function(require,module,exports){
-
-},{}],6:[function(require,module,exports){
 /*
  * Copyright Camunda Services GmbH and/or licensed to Camunda Services GmbH
  * under one or more contributor license agreements. See the NOTICE file
@@ -36576,7 +36572,7 @@ module.exports = angular;
 
 module.exports = require('angular');
 
-},{"angular":4}],7:[function(require,module,exports){
+},{"angular":4}],6:[function(require,module,exports){
 /*
  * angular-ui-bootstrap
  * http://angular-ui.github.io/bootstrap/
