@@ -42160,15 +42160,15 @@ var parser_6 = parser.validate;
 var parser_7 = parser.j2xParser;
 var parser_8 = parser.parseToNimn;
 
-exports.default = parser;
-exports.parse = parser_1;
-exports.convertTonimn = parser_2;
-exports.getTraversalObj = parser_3;
 exports.convertToJson = parser_4;
 exports.convertToJsonString = parser_5;
-exports.validate = parser_6;
+exports.convertTonimn = parser_2;
+exports.default = parser;
+exports.getTraversalObj = parser_3;
 exports.j2xParser = parser_7;
+exports.parse = parser_1;
 exports.parseToNimn = parser_8;
+exports.validate = parser_6;
 
 },{}],11:[function(require,module,exports){
 /*
