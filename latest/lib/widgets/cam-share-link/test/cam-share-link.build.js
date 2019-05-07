@@ -123,7 +123,7 @@ module.exports = ['$timeout', '$translate', function($timeout, $translate) {
       }
 
 
-      function resize() {
+      function handleResize() {
 
         var content = element[0].querySelector('[ng-transclude]');
         var offset = element[0].parentElement.offsetWidth - element[0].offsetWidth;
@@ -148,8 +148,8 @@ module.exports = ['$timeout', '$translate', function($timeout, $translate) {
         var link = element[0].querySelector('a.' + $scope.icon);
         if (!link) { return; }
 
-        window.addEventListener('resize', resize);
-        resize();
+        window.addEventListener('resize', handleResize);
+        handleResize();
 
         cb = new Clipboard(link, {
           text: function() {
@@ -171,7 +171,7 @@ module.exports = ['$timeout', '$translate', function($timeout, $translate) {
 
 
       $scope.$on('$destroy', function() {
-        window.removeEventListener('resize', resize);
+        window.removeEventListener('resize', handleResize);
         if (cb && cb.destroy) {
           cb.destroy();
         }
