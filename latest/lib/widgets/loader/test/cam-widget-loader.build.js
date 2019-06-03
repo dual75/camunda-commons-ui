@@ -20,33 +20,34 @@
 
 
 var angular = require('camunda-bpm-sdk-js/vendor/angular'),
+  template = "<div class=\"loader-state loaded\"\n     ng-show=\"loadingState === 'LOADED'\"\n     ng-transclude></div>\n\n<div class=\"loader-state loading\"\n     ng-if=\"loadingState === 'LOADING'\">\n  <span class=\"glyphicon glyphicon-refresh animate-spin\"></span>\n  {{ textLoading }}\n</div>\n\n<div class=\"loader-state empty\"\n     ng-if=\"loadingState === 'EMPTY'\">\n  {{ textEmpty }}\n</div>\n\n<div uib-alert class=\"loader-state alert alert-danger\"\n     ng-if=\"loadingState === 'ERROR'\">\n  {{ textError }}\n</div>\n";
 
-    template = "<div class=\"loader-state loaded\"\n     ng-show=\"loadingState === 'LOADED'\"\n     ng-transclude></div>\n\n<div class=\"loader-state loading\"\n     ng-if=\"loadingState === 'LOADING'\">\n  <span class=\"glyphicon glyphicon-refresh animate-spin\"></span>\n  {{ textLoading }}\n</div>\n\n<div class=\"loader-state empty\"\n     ng-if=\"loadingState === 'EMPTY'\">\n  {{ textEmpty }}\n</div>\n\n<div uib-alert class=\"loader-state alert alert-danger\"\n     ng-if=\"loadingState === 'ERROR'\">\n  {{ textError }}\n</div>\n";
+module.exports = [
+  function() {
+    return {
+      transclude: true,
 
-module.exports = [function() {
-  return {
-    transclude: true,
+      template: template,
 
-    template: template,
+      scope: {
+        loadingState: '@',
+        textEmpty: '@',
+        textError: '@',
+        textLoading: '@'
+      },
 
-    scope: {
-      loadingState: '@',
-      textEmpty:    '@',
-      textError:    '@',
-      textLoading:  '@'
-    },
+      compile: function(element, attrs) {
+        if (!angular.isDefined(attrs.textLoading)) {
+          attrs.textLoading = 'Loading…';
+        }
 
-    compile: function(element, attrs) {
-      if (!angular.isDefined(attrs.textLoading)) {
-        attrs.textLoading = 'Loading…';
+        if (!angular.isDefined(attrs.loadingState)) {
+          attrs.loadingState = 'INITIAL';
+        }
       }
-
-      if (!angular.isDefined(attrs.loadingState)) {
-        attrs.loadingState = 'INITIAL';
-      }
-    }
-  };
-}];
+    };
+  }
+];
 
 },{"camunda-bpm-sdk-js/vendor/angular":5}],2:[function(require,module,exports){
 /*

@@ -22,96 +22,107 @@ var Clipboard = require('clipboard');
 
 var template = "<span ng-transclude></span>\n<a ng-if=\"!noTooltip\"\n   uib-tooltip=\"{{ tooltipText }}\"\n   tooltip-append-to-body=\"true\"\n   ng-class=\"{'copy-ok': copyStatus === true, 'copy-error': copyStatus === false}\"\n   class=\"glyphicon {{icon}}\"></a>\n<a ng-if=\"noTooltip\"\n   ng-class=\"{'copy-ok': copyStatus === true, 'copy-error': copyStatus === false}\"\n   class=\"glyphicon {{icon}}\"></a>\n";
 
-module.exports = ['$timeout', '$translate', function($timeout, $translate) {
-  return {
-    transclude: true,
-    template: template,
-    scope: {
-      value: '=camWidgetClipboard'
-    },
+module.exports = [
+  '$timeout',
+  '$translate',
+  function($timeout, $translate) {
+    return {
+      transclude: true,
+      template: template,
+      scope: {
+        value: '=camWidgetClipboard'
+      },
 
-    link: function($scope, element, attrs) {
-      var cb;
+      link: function($scope, element, attrs) {
+        var cb;
 
-      $scope.noTooltip = typeof attrs.noTooltip !== 'undefined';
-      $scope.copyStatus = null;
-      $scope.icon = attrs.icon || 'glyphicon-copy';
+        $scope.noTooltip = typeof attrs.noTooltip !== 'undefined';
+        $scope.copyStatus = null;
+        $scope.icon = attrs.icon || 'glyphicon-copy';
 
-      $scope.$watch('value', function() {
-        $scope.tooltipText = attrs.tooltipText || $translate.instant('CAM_WIDGET_COPY', {value: $scope.value});
-      });
+        $scope.$watch('value', function() {
+          $scope.tooltipText =
+            attrs.tooltipText ||
+            $translate.instant('CAM_WIDGET_COPY', {value: $scope.value});
+        });
 
-      var _top;
-      function restore() {
-        $scope.$apply();
-        _top = $timeout(function() {
-          $scope.copyStatus = null;
-        }, 1200, true);
-      }
-
-
-      function handleResize() {
-
-        var content = element[0].querySelector('[ng-transclude]');
-        var icon = element[0].querySelector('a.glyphicon-copy');
-        var elementStyle = window.getComputedStyle(element[0]);
-
-        var contentWidth = 1;
-        var containerWidth = 0;
-        if(content && icon) {
-          contentWidth = (content.offsetWidth + icon.offsetWidth);
-          containerWidth = parseInt(elementStyle.width) - parseInt(elementStyle.paddingRight) - parseInt(elementStyle.paddingLeft);
+        var _top;
+        function restore() {
+          $scope.$apply();
+          _top = $timeout(
+            function() {
+              $scope.copyStatus = null;
+            },
+            1200,
+            true
+          );
         }
 
-        if(contentWidth - containerWidth > 0) {
-          if(content.className.indexOf('resize') === -1)
-            content.className += ' resize';
-        } else {
-          content.className = content.className.replace(' resize', '');
+        function handleResize() {
+          var content = element[0].querySelector('[ng-transclude]');
+          var icon = element[0].querySelector('a.glyphicon-copy');
+          var elementStyle = window.getComputedStyle(element[0]);
+
+          var contentWidth = 1;
+          var containerWidth = 0;
+          if (content && icon) {
+            contentWidth = content.offsetWidth + icon.offsetWidth;
+            containerWidth =
+              parseInt(elementStyle.width) -
+              parseInt(elementStyle.paddingRight) -
+              parseInt(elementStyle.paddingLeft);
+          }
+
+          if (contentWidth - containerWidth > 0) {
+            if (content.className.indexOf('resize') === -1)
+              content.className += ' resize';
+          } else {
+            content.className = content.className.replace(' resize', '');
+          }
         }
-      }
 
-      // needed because otherwise the content of `element` is not rendered yet
-      // and `querySelector` is then not available
-      $timeout(function() {
-        var link = element[0].querySelector('a.' + $scope.icon);
-        if (!link) { return; }
+        // needed because otherwise the content of `element` is not rendered yet
+        // and `querySelector` is then not available
+        $timeout(function() {
+          var link = element[0].querySelector('a.' + $scope.icon);
+          if (!link) {
+            return;
+          }
 
-        window.addEventListener('resize', handleResize);
-        handleResize();
+          window.addEventListener('resize', handleResize);
+          handleResize();
 
-        cb = new Clipboard(link, {
-          text: function() {
-            return $scope.value;
+          cb = new Clipboard(link, {
+            text: function() {
+              return $scope.value;
+            }
+          });
+
+          cb.on('success', function() {
+            $scope.copyStatus = true;
+            restore();
+          });
+
+          cb.on('error', function() {
+            $scope.copyStatus = false;
+            restore();
+          });
+        });
+
+        $scope.$on('$destroy', function() {
+          window.removeEventListener('resize', handleResize);
+          if (cb && cb.destroy) {
+            cb.destroy();
+          }
+
+          if (_top) {
+            $timeout.cancel(_top);
           }
         });
-
-        cb.on('success', function() {
-          $scope.copyStatus = true;
-          restore();
-        });
-
-
-        cb.on('error', function() {
-          $scope.copyStatus = false;
-          restore();
-        });
-      });
-
-
-      $scope.$on('$destroy', function() {
-        window.removeEventListener('resize', handleResize);
-        if (cb && cb.destroy) {
-          cb.destroy();
-        }
-
-        if (_top) {
-          $timeout.cancel(_top);
-        }
-      });
-    }
-  };
-}];
+      }
+    };
+  }
+];
 
 },{"clipboard":8}],2:[function(require,module,exports){
 /*
@@ -136,30 +147,32 @@ module.exports = ['$timeout', '$translate', function($timeout, $translate) {
 
 var template = "<div class=\"debug\">\n  <div class=\"col-xs-2\">\n    <button class=\"btn btn-default btn-round\"\n            ng-click=\"toggleOpen()\"\n            uib-tooltip=\"{{tooltip}}\"\n            tooltip-placement=\"{{tooltipPlacement}}\">\n      <span class=\"glyphicon\"\n            ng-class=\"{'glyphicon-eye-open': !open, 'glyphicon-eye-close': open}\"></span>\n    </button>\n  </div>\n  <div class=\"col-xs-10\"\n       ng-show=\"open\">\n    <span ng-show=\"extended\" cam-widget-clipboard=\"extendedInfo\"\n          no-tooltip>\n      <code>{{ extensionName }}</code>\n    </span>\n    <pre ng-show=\"extended\">{{ extendedInfo }}</pre>\n    <span cam-widget-clipboard=\"debugged | json \"\n          no-tooltip>\n      <code>{{ varName }}</code>\n    </span>\n    <pre>{{ debugged | json }}</pre>\n  </div>\n</div>\n";
 
-module.exports = [function() {
-  return {
-    template: template,
+module.exports = [
+  function() {
+    return {
+      template: template,
 
-    scope: {
-      debugged:         '=',
-      displayName:      '@displayName',
-      extensionName:    '@extensionName',
-      open:             '@',
-      extendedInfo:     '=',
-      tooltip:          '@camWidgetDebugTooltip',
-      tooltipPlacement: '@camWidgetDebugTooltipPlacement'
-    },
+      scope: {
+        debugged: '=',
+        displayName: '@displayName',
+        extensionName: '@extensionName',
+        open: '@',
+        extendedInfo: '=',
+        tooltip: '@camWidgetDebugTooltip',
+        tooltipPlacement: '@camWidgetDebugTooltipPlacement'
+      },
 
-    link: function(scope, element, attrs) {
-      scope.varName = attrs.displayName || attrs.debugged;
-      scope.extended = attrs.extended !== undefined;
+      link: function(scope, element, attrs) {
+        scope.varName = attrs.displayName || attrs.debugged;
+        scope.extended = attrs.extended !== undefined;
 
-      scope.toggleOpen = function() {
-        scope.open = !scope.open;
-      };
-    }
-  };
-}];
+        scope.toggleOpen = function() {
+          scope.open = !scope.open;
+        };
+      }
+    };
+  }
+];
 
 },{}],3:[function(require,module,exports){
 /*

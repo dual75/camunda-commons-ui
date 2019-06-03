@@ -21,17 +21,19 @@
 
 var template = "<div class=\"container-fluid\">\n  <div class=\"row\">\n    <div class=\"col-xs-6\" style=\"text-align: left;\">\n      {{ 'CAM_WIDGET_FOOTER_TIMEZONE' | translate }} <i>{{timezoneName}}</i>\n    </div>\n    <div class=\"col-xs-6\">\n      {{ 'CAM_WIDGET_FOOTER_POWERED_BY' | translate }} <a href=\"http://camunda.org\">camunda BPM</a> /\n      <span class=\"version\">{{version}}</span>\n    </div>\n  </div>\n</div>\n";
 
-module.exports = [function() {
-  return {
-    template: template,
-    scope: {
-      version: '@'
-    },
-    link: function($scope) {
-      $scope.timezoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    }
-  };
-}];
+module.exports = [
+  function() {
+    return {
+      template: template,
+      scope: {
+        version: '@'
+      },
+      link: function($scope) {
+        $scope.timezoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      }
+    };
+  }
+];
 
 },{}],2:[function(require,module,exports){
 /*

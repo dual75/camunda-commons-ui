@@ -21,7 +21,8 @@
 function roundUp(v, x) {
   var stepWidth = Math.ceil(v / x);
   var stepWidthStr = '' + stepWidth;
-  stepWidth = (parseInt(stepWidthStr[0], 10) + 1) * Math.pow(10, stepWidthStr.length - 1);
+  stepWidth =
+    (parseInt(stepWidthStr[0], 10) + 1) * Math.pow(10, stepWidthStr.length - 1);
   return stepWidth * x;
 }
 
@@ -55,7 +56,7 @@ function LineChart(options) {
 
   this.lineWidth = options.lineWidth || 1;
 
-  this.isLogScale =  options.isLogScale || false;
+  this.isLogScale = options.isLogScale || false;
 
   this.valueLabelsCount = options.valueLabelsCount || 8;
 
@@ -84,57 +85,34 @@ module.exports = LineChart;
 
 var proto = LineChart.prototype;
 
-
 proto._mouseIsDown = false;
 
 proto._selectedIn = null;
 proto._selectedOut = null;
 
-
-
-proto._eventHandlers = {
-};
-
-
-
-
-
-
+proto._eventHandlers = {};
 
 proto._eventHandlers.mouseout = function(evt) {
   this.drawMouseHint().drawSelection(evt);
 };
-
-
-
-
-
-
-
 
 proto._eventHandlers.mousemove = function(evt) {
   var offset = this.cursorPosition(evt);
 
   this._hoveredSelectionHandle = this.hoveredSelectionHandle(evt);
 
-  this.canvas.style.cursor = this._hoveredSelectionHandle ? 'ew-resize' : 'default';
+  this.canvas.style.cursor = this._hoveredSelectionHandle
+    ? 'ew-resize'
+    : 'default';
 
   if (this._grabbedSelectionHandle === 'in') {
     this._selectedIn = offset.left;
-  }
-  else if (this._grabbedSelectionHandle === 'out') {
+  } else if (this._grabbedSelectionHandle === 'out') {
     this._selectedOut = offset.left;
   }
 
   this.drawMouseHint(offset.left, offset.top).drawSelection(evt);
 };
-
-
-
-
-
-
-
 
 proto._eventHandlers.mousedown = function(evt) {
   var pos = this.cursorPosition(evt);
@@ -143,28 +121,25 @@ proto._eventHandlers.mousedown = function(evt) {
 
   this._hoveredSelectionHandle = this.hoveredSelectionHandle(evt);
 
-  this.canvas.style.cursor = this._hoveredSelectionHandle ? 'ew-resize' : 'default';
+  this.canvas.style.cursor = this._hoveredSelectionHandle
+    ? 'ew-resize'
+    : 'default';
 
   if (!this._hoveredSelectionHandle) {
     if (!this._mouseIsDown) {
-      this._selectedIn = Math.min(Math.max(pos.left, verticalScaleX), verticalScaleX + innerW);
+      this._selectedIn = Math.min(
+        Math.max(pos.left, verticalScaleX),
+        verticalScaleX + innerW
+      );
       this._selectedOut = null;
     }
     this._mouseIsDown = true;
-  }
-  else {
+  } else {
     this._grabbedSelectionHandle = this._hoveredSelectionHandle;
   }
 
   this.drawMouseHint(pos.left, pos.top).drawSelection(evt);
 };
-
-
-
-
-
-
-
 
 proto._eventHandlers.mouseup = function(evt) {
   var pos = this.cursorPosition(evt);
@@ -176,7 +151,10 @@ proto._eventHandlers.mouseup = function(evt) {
   }
 
   if (this._mouseIsDown) {
-    this._selectedOut = Math.max(Math.min(pos.left, verticalScaleX + innerW), verticalScaleX);
+    this._selectedOut = Math.max(
+      Math.min(pos.left, verticalScaleX + innerW),
+      verticalScaleX
+    );
   }
   this._mouseIsDown = false;
 
@@ -203,13 +181,6 @@ proto._eventHandlers.mouseup = function(evt) {
   }
 };
 
-
-
-
-
-
-
-
 proto._eventHandlers.wheel = function(evt) {
   if (!this._selectedIn || !this._selectedOut) {
     return;
@@ -220,12 +191,14 @@ proto._eventHandlers.wheel = function(evt) {
   var ctx = this.ctx;
   ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-  var speed = Math.max(Math.round(Math.abs(this._selectedOut - this._selectedIn) / 10), 1);
+  var speed = Math.max(
+    Math.round(Math.abs(this._selectedOut - this._selectedIn) / 10),
+    1
+  );
   if (evt.deltaY > 0) {
     this._selectedIn += speed;
     this._selectedOut -= speed;
-  }
-  else {
+  } else {
     this._selectedIn -= speed;
     this._selectedOut += speed;
   }
@@ -240,18 +213,6 @@ proto._eventHandlers.wheel = function(evt) {
   });
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
 proto.cursorPosition = function(evt) {
   var rect = this.canvas.getBoundingClientRect();
   return {
@@ -260,39 +221,27 @@ proto.cursorPosition = function(evt) {
   };
 };
 
-
-
-
-
-
 proto.bindEvents = function() {
   Object.keys(proto._eventHandlers).forEach(function(evtName) {
-    this.canvas.addEventListener(evtName, proto._eventHandlers[evtName].bind(this), false);
+    this.canvas.addEventListener(
+      evtName,
+      proto._eventHandlers[evtName].bind(this),
+      false
+    );
   }, this);
   return this;
 };
-
-
-
-
-
-
-
 
 proto.unbindEvents = function() {
   Object.keys(proto._eventHandlers).forEach(function(evtName) {
-    this.canvas.removeEventListener(evtName, proto._eventHandlers[evtName].bind(this), false);
+    this.canvas.removeEventListener(
+      evtName,
+      proto._eventHandlers[evtName].bind(this),
+      false
+    );
   }, this);
   return this;
 };
-
-
-
-
-
-
-
-
 
 proto._clearCache = function() {
   this._verticalLabels = null;
@@ -303,14 +252,6 @@ proto._clearCache = function() {
   this._selectedIn = null;
   this._selectedOut = null;
 };
-
-
-
-
-
-
-
-
 
 proto.resize = function(width, height, disableSelection) {
   this._clearCache();
@@ -341,13 +282,6 @@ proto.resize = function(width, height, disableSelection) {
   return this;
 };
 
-
-
-
-
-
-
-
 proto.max = function(index) {
   var val = 0;
   if (!arguments.length) {
@@ -363,13 +297,6 @@ proto.max = function(index) {
 
   return val;
 };
-
-
-
-
-
-
-
 
 proto.min = function(index) {
   var val = this.max();
@@ -388,40 +315,21 @@ proto.min = function(index) {
   return val;
 };
 
-
-
-
-
-
-
-
-
 proto.momentAtX = function(x) {
   var moment = this.moment;
   var labelFrom = this.labelFrom;
   var labelTo = this.labelTo;
   var labelDiff = labelTo - labelFrom;
   var msPerPx = labelDiff / this.innerW();
-  return moment(new Date((msPerPx * (x - this.verticalScaleX())) + this.labelFrom), moment.ISO_8601);
+  return moment(
+    new Date(msPerPx * (x - this.verticalScaleX()) + this.labelFrom),
+    moment.ISO_8601
+  );
 };
-
-
-
-
-
-
-
 
 proto.valueAtY = function(y) {
   return y;
 };
-
-
-
-
-
-
-
 
 proto.setData = function(data, newTimespan, newInterval) {
   this._clearCache();
@@ -438,17 +346,18 @@ proto.setData = function(data, newTimespan, newInterval) {
   }
 
   var emptyDate = moment();
-  var defaultData = [[
-    {
-      value: 0,
-      timestamp: emptyDate.format(this.dateformat)
-    }
-  ]];
+  var defaultData = [
+    [
+      {
+        value: 0,
+        timestamp: emptyDate.format(this.dateformat)
+      }
+    ]
+  ];
   if (!data || !data.length || !data[0]) {
     data = defaultData;
   }
   this.data = data;
-
 
   var timespan = this.timespan;
   var labelsStart;
@@ -457,18 +366,18 @@ proto.setData = function(data, newTimespan, newInterval) {
   var rounded = roundUp(max, this.valueLabelsCount);
   var timeLabelFormats = this.timeLabelFormats;
   var labelValue;
-  
+
   // if it's a log scale, the number of value labels is recalculated
-  if(this.isLogScale) {
-    this.valueLabelsCount = (this.maxLog() + 1);
+  if (this.isLogScale) {
+    this.valueLabelsCount = this.maxLog() + 1;
   }
 
   this.valueLabels = [];
   for (var l = this.valueLabelsCount; l >= 0; l--) {
     // set label value based on scale type
-    labelValue = this.isLogScale ?
-      l && Math.pow(10, l-1) :
-      abbreviateNumber((l * rounded) / this.valueLabelsCount) || 0;
+    labelValue = this.isLogScale
+      ? l && Math.pow(10, l - 1)
+      : abbreviateNumber((l * rounded) / this.valueLabelsCount) || 0;
 
     this.valueLabels.push(labelValue);
   }
@@ -477,17 +386,15 @@ proto.setData = function(data, newTimespan, newInterval) {
   if (data.length && data[0] && data[0].length && data[0][0].timestamp) {
     var to = moment();
 
-    var labelTo = this.labelTo = to.clone();
+    var labelTo = (this.labelTo = to.clone());
     if (timespan === 'day') {
       labelTo.startOf('hour').add(1, 'hour');
-    }
-    else if (timespan === 'week') {
+    } else if (timespan === 'week') {
       labelTo.startOf('day').add(1, 'day');
-    }
-    else if (timespan === 'month') {
+    } else if (timespan === 'month') {
       labelTo.startOf('week').add(1, 'week');
     }
-    var labelFrom = this.labelFrom = labelTo.clone().subtract(1, timespan);
+    var labelFrom = (this.labelFrom = labelTo.clone().subtract(1, timespan));
 
     var count;
     var unit;
@@ -496,21 +403,23 @@ proto.setData = function(data, newTimespan, newInterval) {
       count = 12;
       unit = 'hour';
       unitCount = 2;
-    }
-    else if (timespan === 'week') {
+    } else if (timespan === 'week') {
       count = 7;
       unit = 'day';
-    }
-    else if (timespan === 'month') {
+    } else if (timespan === 'month') {
       count = 4;
       unit = 'week';
     }
 
     for (var c = 0; c <= count; c++) {
-      this.timeLabels.push(labelFrom.clone().add(c * unitCount, unit).format(timeLabelFormats[timespan]));
+      this.timeLabels.push(
+        labelFrom
+          .clone()
+          .add(c * unitCount, unit)
+          .format(timeLabelFormats[timespan])
+      );
     }
   }
-
 
   this.data = data.map(function(set) {
     if (!set || !set.length) {
@@ -534,14 +443,6 @@ proto.setData = function(data, newTimespan, newInterval) {
   return this.draw();
 };
 
-
-
-
-
-
-
-
-
 proto._verticalLabels = null;
 proto.verticalLabels = function() {
   if (this._verticalLabels) {
@@ -554,22 +455,13 @@ proto.verticalLabels = function() {
   var innerW = this.innerW();
 
   timeLabels.forEach(function(l) {
-    tt += ctx.measureText(l).width + (textPadding * 2);
+    tt += ctx.measureText(l).width + textPadding * 2;
   });
 
   this._verticalLabels = tt > innerW;
 
   return this._verticalLabels;
 };
-
-
-
-
-
-
-
-
-
 
 proto._innerW = null;
 proto.innerW = function() {
@@ -581,12 +473,11 @@ proto.innerW = function() {
   var ctx = this.ctx;
   var width = ctx.canvas.width;
 
-
   var tm = 0;
   var textPadding = this.textPadding;
   var timeLabels = this.timeLabels;
   timeLabels.forEach(function(l) {
-    tm = Math.max(tm, ctx.measureText(l).width + (textPadding * 2));
+    tm = Math.max(tm, ctx.measureText(l).width + textPadding * 2);
   });
 
   this._innerW = width - (padding + this.verticalScaleX());
@@ -595,13 +486,6 @@ proto.innerW = function() {
   }
   return this._innerW;
 };
-
-
-
-
-
-
-
 
 proto._innerH = null;
 proto.innerH = function() {
@@ -618,14 +502,6 @@ proto.innerH = function() {
   return this._innerH;
 };
 
-
-
-
-
-
-
-
-
 proto._verticalScaleX = null;
 proto.verticalScaleX = function() {
   if (this._verticalScaleX) {
@@ -638,21 +514,18 @@ proto.verticalScaleX = function() {
   var tickSize = this.tickSize;
 
   valueLabels.forEach(function(l) {
-    verticalScaleX = Math.max(verticalScaleX, ctx.measureText(l || '0').width + (textPadding * 4) + tickSize);
+    verticalScaleX = Math.max(
+      verticalScaleX,
+      ctx.measureText(l || '0').width + textPadding * 4 + tickSize
+    );
   });
-  verticalScaleX = Math.round(Math.max(verticalScaleX, tickSize + textPadding)) + 0.5;
+  verticalScaleX =
+    Math.round(Math.max(verticalScaleX, tickSize + textPadding)) + 0.5;
 
   this._verticalScaleX = verticalScaleX;
 
   return verticalScaleX;
 };
-
-
-
-
-
-
-
 
 proto._horizontalScaleY = null;
 proto.horizontalScaleY = function() {
@@ -671,27 +544,22 @@ proto.horizontalScaleY = function() {
 
   if (vertLabel) {
     timeLabels.forEach(function(l) {
-      horizontalScaleY = Math.max(horizontalScaleY, ctx.measureText(l).width + (textPadding * 4) + tickSize);
+      horizontalScaleY = Math.max(
+        horizontalScaleY,
+        ctx.measureText(l).width + textPadding * 4 + tickSize
+      );
     });
-    horizontalScaleY = Math.round(Math.max(horizontalScaleY, tickSize + textPadding));
-  }
-  else {
-    horizontalScaleY = fontSize + (textPadding * 2) + tickSize;
+    horizontalScaleY = Math.round(
+      Math.max(horizontalScaleY, tickSize + textPadding)
+    );
+  } else {
+    horizontalScaleY = fontSize + textPadding * 2 + tickSize;
   }
 
   this._horizontalScaleY = horizontalScaleY;
 
   return horizontalScaleY;
 };
-
-
-
-
-
-
-
-
-
 
 proto.drawMouseHint = function(x, y) {
   var ctx = this.ctx;
@@ -715,8 +583,8 @@ proto.drawMouseHint = function(x, y) {
 
   if (x && x > verticalScaleX && x <= verticalScaleX + innerW) {
     var text = this.momentAtX(x).format(this.timestampFormat);
-    var tw = ctx.measureText(text).width + (padding * 2);
-    var tx = x + tw > (width - padding) ? width - (padding + tw) : x;
+    var tw = ctx.measureText(text).width + padding * 2;
+    var tx = x + tw > width - padding ? width - (padding + tw) : x;
     var ty = y > padding ? y : padding;
     ctx.fillText(text, tx, ty);
 
@@ -729,12 +597,6 @@ proto.drawMouseHint = function(x, y) {
 
   return this;
 };
-
-
-
-
-
-
 
 proto.drawSelection = function(evt) {
   var ctx = this.ctx;
@@ -757,7 +619,10 @@ proto.drawSelection = function(evt) {
       ctx.fillRect(
         this._selectedIn,
         padding,
-        Math.min(offset.left - this._selectedIn, verticalScaleX + innerW - this._selectedIn),
+        Math.min(
+          offset.left - this._selectedIn,
+          verticalScaleX + innerW - this._selectedIn
+        ),
         innerH
       );
     }
@@ -784,8 +649,8 @@ proto.drawSelection = function(evt) {
       this._selectedIn = verticalScaleX;
     }
 
-    if (this._selectedOut > (verticalScaleX + innerW)) {
-      this._selectedOut = (verticalScaleX + innerW);
+    if (this._selectedOut > verticalScaleX + innerW) {
+      this._selectedOut = verticalScaleX + innerW;
     }
 
     ctx.fillStyle = unselectedColor;
@@ -797,9 +662,19 @@ proto.drawSelection = function(evt) {
     }
 
     // left rect
-    ctx.fillRect(verticalScaleX, padding, this._selectedIn - verticalScaleX, innerH);
+    ctx.fillRect(
+      verticalScaleX,
+      padding,
+      this._selectedIn - verticalScaleX,
+      innerH
+    );
     // right rect
-    ctx.fillRect(this._selectedOut, padding, (innerW + verticalScaleX) - this._selectedOut, innerH);
+    ctx.fillRect(
+      this._selectedOut,
+      padding,
+      innerW + verticalScaleX - this._selectedOut,
+      innerH
+    );
 
     ctx.beginPath();
     ctx.moveTo(this._selectedIn + 0.5, innerH + padding);
@@ -807,7 +682,6 @@ proto.drawSelection = function(evt) {
     ctx.lineTo(this._selectedOut + 0.5, padding + 0.5);
     ctx.lineTo(this._selectedOut + 0.5, innerH + padding);
     ctx.stroke();
-
 
     ctx.lineWidth = handleWidth + 2;
     ctx.strokeStyle = this.rulersColor;
@@ -818,7 +692,10 @@ proto.drawSelection = function(evt) {
     ctx.closePath();
 
     ctx.lineWidth = handleWidth;
-    ctx.strokeStyle = this._hoveredSelectionHandle === 'in' ? this.handleColorHover : this.handleColor;
+    ctx.strokeStyle =
+      this._hoveredSelectionHandle === 'in'
+        ? this.handleColorHover
+        : this.handleColor;
     ctx.beginPath();
     ctx.moveTo(this._selectedIn, padding + 10);
     ctx.lineTo(this._selectedIn, 80);
@@ -833,7 +710,10 @@ proto.drawSelection = function(evt) {
     ctx.closePath();
 
     ctx.lineWidth = handleWidth;
-    ctx.strokeStyle = this._hoveredSelectionHandle === 'out' ? this.handleColorHover : this.handleColor;
+    ctx.strokeStyle =
+      this._hoveredSelectionHandle === 'out'
+        ? this.handleColorHover
+        : this.handleColor;
     ctx.beginPath();
     ctx.moveTo(this._selectedOut, padding + 10);
     ctx.lineTo(this._selectedOut, 80);
@@ -846,10 +726,6 @@ proto.drawSelection = function(evt) {
 
   return this;
 };
-
-
-
-
 
 proto.hoveredSelectionHandle = function(evt) {
   if (!this._selectedIn || !this._selectedOut) return false;
@@ -865,7 +741,7 @@ proto.hoveredSelectionHandle = function(evt) {
   ctx.strokeStyle = 'rgba(0,0,0,0)';
 
   ctx.beginPath();
-  ctx.rect(this._selectedIn - (handleWidth / 2), padding + 10, handleWidth, 80);
+  ctx.rect(this._selectedIn - handleWidth / 2, padding + 10, handleWidth, 80);
   ctx.stroke();
   ctx.closePath();
   if (ctx.isPointInPath(offset.left, offset.top)) {
@@ -873,7 +749,7 @@ proto.hoveredSelectionHandle = function(evt) {
   }
 
   ctx.beginPath();
-  ctx.rect(this._selectedOut - (handleWidth / 2), padding + 10, handleWidth, 80);
+  ctx.rect(this._selectedOut - handleWidth / 2, padding + 10, handleWidth, 80);
   ctx.stroke();
   ctx.closePath();
   if (ctx.isPointInPath(offset.left, offset.top)) {
@@ -892,9 +768,6 @@ proto.maxLog = function() {
   var max = this.max() || 1;
   return Math.ceil(log10(max));
 };
-
-
-
 
 proto.drawRulers = function() {
   var ctx = this.offCtx; // for compositing with mouse interaction, draw on the canvas which is not in the DOM
@@ -928,15 +801,12 @@ proto.drawRulers = function() {
   ctx.lineJoin = 'round';
   ctx.font = this.fontSize + 'px ' + this.fontFamily;
 
-
   // draw horizontal (time) scale
-  var t = (height - horizontalScaleY) + 0.5;
+  var t = height - horizontalScaleY + 0.5;
   ctx.beginPath();
   ctx.moveTo(verticalScaleX - tickSize, t);
   ctx.lineTo(verticalScaleX + innerW, t);
   ctx.stroke();
-
-
 
   // draw vertical (value) scale
   ctx.beginPath();
@@ -944,20 +814,16 @@ proto.drawRulers = function() {
   ctx.lineTo(verticalScaleX, t + tickSize);
   ctx.stroke();
 
-
-
-
   if (vertLabel) {
     ctx.textAlign = 'right';
     ctx.textBaseline = 'middle';
-  }
-  else {
+  } else {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'top';
   }
 
   timeLabels.forEach(function(label, l) {
-    var tx = verticalScaleX + (l * (innerW / (timeLabels.length - 1)));
+    var tx = verticalScaleX + l * (innerW / (timeLabels.length - 1));
 
     ctx.beginPath();
     ctx.moveTo(tx, t);
@@ -970,13 +836,14 @@ proto.drawRulers = function() {
       ctx.rotate(-Math.PI / 2);
       ctx.fillText(timeLabels[l], 0, 0);
       ctx.restore();
-    }
-    else {
-      ctx.fillText(timeLabels[l], tx, height - (horizontalScaleY - (tickSize + textPadding)));
+    } else {
+      ctx.fillText(
+        timeLabels[l],
+        tx,
+        height - (horizontalScaleY - (tickSize + textPadding))
+      );
     }
   });
-
-
 
   step = innerH / (valueLabels.length - 1);
   maxLog = this.maxLog();
@@ -984,15 +851,20 @@ proto.drawRulers = function() {
   ctx.textBaseline = 'middle';
   for (index = 0; index < valueLabels.length; index++) {
     valueLabel = valueLabels[index];
-    if(this.isLogScale) {
-      transformedVal = valueLabel && (innerH / (maxLog+1)) * (log10(valueLabel) + 1);
-      yPosition = (innerH - transformedVal + padding);
+    if (this.isLogScale) {
+      transformedVal =
+        valueLabel && (innerH / (maxLog + 1)) * (log10(valueLabel) + 1);
+      yPosition = innerH - transformedVal + padding;
     } else {
-      yPosition = Math.round(padding + (step * index)) - 0.5;
+      yPosition = Math.round(padding + step * index) - 0.5;
     }
 
-    ctx.fillText(abbreviateNumber(valueLabel) || 0, verticalScaleX - (tickSize + textPadding), yPosition);
-    
+    ctx.fillText(
+      abbreviateNumber(valueLabel) || 0,
+      verticalScaleX - (tickSize + textPadding),
+      yPosition
+    );
+
     if (index < valueLabels.length - 1) {
       ctx.beginPath();
       ctx.moveTo(verticalScaleX - tickSize, yPosition);
@@ -1003,9 +875,6 @@ proto.drawRulers = function() {
 
   return this;
 };
-
-
-
 
 proto.draw = function() {
   var ctx = this.offCtx; // for compositing with mouse interaction, draw on the canvas which is not in the DOM
@@ -1026,7 +895,7 @@ proto.draw = function() {
   var labelTo = this.labelTo;
   var labelDiff = labelTo - labelFrom;
   var interval = this.interval;
-  var t = (height - horizontalScaleY) + 0.5;
+  var t = height - horizontalScaleY + 0.5;
   var isLogScale = this.isLogScale;
 
   var max = this.max();
@@ -1034,15 +903,14 @@ proto.draw = function() {
   var rounded = roundUp(max, this.valueLabelsCount);
   function pxFromTop(val) {
     if (!val) return t;
-    var transformedVal = val && (innerH / (maxLog+1) * (log10(val)+1));
-    return isLogScale ?
-      innerH - transformedVal + padding:
-      (innerH - ((innerH / rounded) * val)) + padding;
+    var transformedVal = val && (innerH / (maxLog + 1)) * (log10(val) + 1);
+    return isLogScale
+      ? innerH - transformedVal + padding
+      : innerH - (innerH / rounded) * val + padding;
   }
   function pxFromLeft(mom) {
     return verticalScaleX + ((mom - labelFrom) / labelDiff) * innerW;
   }
-
 
   // draw the data
   this.data.forEach(function(set, index) {
@@ -1067,7 +935,10 @@ proto.draw = function() {
       // first record is after label from, draw a line at 0 until (mom - interval)
       else if (i === 0 && mom > labelFrom) {
         ctx.moveTo(verticalScaleX, height - horizontalScaleY);
-        ctx.lineTo(pxFromLeft(mom.clone().subtract(interval, 'seconds')), height - horizontalScaleY);
+        ctx.lineTo(
+          pxFromLeft(mom.clone().subtract(interval, 'seconds')),
+          height - horizontalScaleY
+        );
       }
 
       if (skipped) {
@@ -1109,14 +980,6 @@ proto.draw = function() {
   return this.drawRulers().drawMouseHint();
 };
 
-
-
-
-
-
-
-
-
 proto.remove = function() {
   this.unbindEvents();
   this.canvas.parentNode.removeChild(this.canvas);
@@ -1144,7 +1007,6 @@ proto.remove = function() {
 
 var AbbreviateNumberFilter = function() {
   return function(number, decimal) {
-
     if (!number) {
       return;
     }
@@ -1157,7 +1019,7 @@ var AbbreviateNumberFilter = function() {
       decimal = 1;
     }
 
-    return abbreviateNumber(number,decimal);
+    return abbreviateNumber(number, decimal);
   };
 
   function abbreviateNumber(number, decimal) {
@@ -1165,7 +1027,7 @@ var AbbreviateNumberFilter = function() {
     decimal = Math.pow(10, decimal);
 
     // Enumerate number abbreviations according to https://en.wikipedia.org/wiki/Yotta-
-    var abbreviations = [ 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y' ];
+    var abbreviations = ['k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
 
     // Go through the array backwards, so we do the largest first
     for (var i = abbreviations.length - 1; i >= 0; i--) {
@@ -1173,13 +1035,13 @@ var AbbreviateNumberFilter = function() {
       var size = Math.pow(10, (i + 1) * 3);
 
       // If the number is bigger or equal do the abbreviation
-      if(size <= number) {
+      if (size <= number) {
         // Here, we multiply by decimal, round, and then divide by decPlaces.
         // This gives us nice rounding to a particular decimal place.
-        number = Math.round(number * decimal / size) / decimal;
+        number = Math.round((number * decimal) / size) / decimal;
 
         // Handle special case where we round up to the next abbreviation
-        if(number == 1000 && i < abbreviations.length - 1) {
+        if (number == 1000 && i < abbreviations.length - 1) {
           number = 1;
           i++;
         }
@@ -1221,108 +1083,114 @@ var LineChart = require('./../../chart/line');
 var moment = require('camunda-bpm-sdk-js/vendor/moment'); // this should be left as-is to support development with `line.html`
 var abbreviateNumber = require('./../../filter/abbreviateNumber')();
 
+module.exports = [
+  '$window',
+  function($window) {
+    return {
+      restrict: 'A',
 
-module.exports = ['$window', function($window) {
-  return {
-    restrict: 'A',
+      scope: {
+        fontFamily: '=?',
+        fontSize: '=?',
+        handleColor: '=?',
+        handleColorHover: '=?',
+        handleWidth: '=?',
+        interval: '=?',
+        lineColors: '=?',
+        lineWidth: '=?',
+        rulersColor: '=?',
+        selectingColor: '=?',
+        selection: '&onSelection',
+        textPadding: '=?',
+        tickSize: '=?',
+        timeLabelFormats: '=?',
+        timespan: '=?',
+        timestampFormat: '=?',
+        unselectedColor: '=?',
+        valueLabelsCount: '=?',
+        values: '=',
+        disableSelection: '=',
+        isLogScale: '='
+      },
 
-    scope: {
-      fontFamily: '=?',
-      fontSize: '=?',
-      handleColor: '=?',
-      handleColorHover: '=?',
-      handleWidth: '=?',
-      interval: '=?',
-      lineColors: '=?',
-      lineWidth: '=?',
-      rulersColor: '=?',
-      selectingColor: '=?',
-      selection: '&onSelection',
-      textPadding: '=?',
-      tickSize: '=?',
-      timeLabelFormats: '=?',
-      timespan: '=?',
-      timestampFormat: '=?',
-      unselectedColor: '=?',
-      valueLabelsCount: '=?',
-      values: '=',
-      disableSelection: '=',
-      isLogScale: '='
-    },
+      link: function($scope, $element) {
+        var container = $element[0];
+        var computedStyles = $window.getComputedStyle(container);
 
-    link: function($scope, $element) {
-      var container = $element[0];
-      var computedStyles = $window.getComputedStyle(container);
+        $scope.timespan = $scope.timespan || 'day';
+        $scope.interval = $scope.interval || 900;
 
-      $scope.timespan = $scope.timespan || 'day';
-      $scope.interval = $scope.interval || 900;
+        function height() {
+          return Math.min(Math.max(container.clientWidth * 0.75, 180), 300);
+        }
 
-      function height() {
-        return Math.min(Math.max(container.clientWidth * 0.75, 180), 300);
-      }
+        var chart = ($scope.chart = new LineChart({
+          moment: moment,
+          abbreviateNumber: abbreviateNumber,
 
-      var chart = $scope.chart = new LineChart({
-        moment: moment,
-        abbreviateNumber: abbreviateNumber,
-
-        onselection: function onselection(info) {
-          $scope.$apply(function() {
-            $scope.selection({
-              info: info
+          onselection: function onselection(info) {
+            $scope.$apply(function() {
+              $scope.selection({
+                info: info
+              });
             });
-          });
-        },
+          },
 
-        width: container.clientWidth,
-        height: height(),
+          width: container.clientWidth,
+          height: height(),
 
-        fontFamily: $scope.fontFamily || computedStyles.fontFamily,
-        fontSize: $scope.fontSize,
-        handleColor: $scope.handleColor,
-        handleColorHover: $scope.handleColorHover,
-        handleWidth: $scope.handleWidth,
-        lineColors: $scope.lineColors,
-        lineWidth: $scope.lineWidth,
-        rulersColor: $scope.rulersColor || computedStyles.color,
-        selectingColor: $scope.selectingColor,
-        textPadding: $scope.textPadding,
-        tickSize: $scope.tickSize,
-        timeLabelFormats: $scope.timeLabelFormats,
-        timestampFormat: $scope.timestampFormat,
-        unselectedColor: $scope.unselectedColor,
-        valueLabelsCount: $scope.valueLabelsCount,
-        disableSelection: $scope.disableSelection,
-        isLogScale: $scope.isLogScale
-      });
+          fontFamily: $scope.fontFamily || computedStyles.fontFamily,
+          fontSize: $scope.fontSize,
+          handleColor: $scope.handleColor,
+          handleColorHover: $scope.handleColorHover,
+          handleWidth: $scope.handleWidth,
+          lineColors: $scope.lineColors,
+          lineWidth: $scope.lineWidth,
+          rulersColor: $scope.rulersColor || computedStyles.color,
+          selectingColor: $scope.selectingColor,
+          textPadding: $scope.textPadding,
+          tickSize: $scope.tickSize,
+          timeLabelFormats: $scope.timeLabelFormats,
+          timestampFormat: $scope.timestampFormat,
+          unselectedColor: $scope.unselectedColor,
+          valueLabelsCount: $scope.valueLabelsCount,
+          disableSelection: $scope.disableSelection,
+          isLogScale: $scope.isLogScale
+        }));
 
-      $scope.$watch('values', function() {
-        var cn = container.className.replace('no-data', '');
-        if (!$scope.values || !$scope.values.length || !$scope.values[0] || !$scope.values[0].length) {
-          cn += ' no-data';
-          chart.setData([[]], $scope.timespan, $scope.interval);
-        }
-        else {
-          chart.setData($scope.values, $scope.timespan, $scope.interval);
-        }
-        container.className = cn;
-      });
+        $scope.$watch('values', function() {
+          var cn = container.className.replace('no-data', '');
+          if (
+            !$scope.values ||
+            !$scope.values.length ||
+            !$scope.values[0] ||
+            !$scope.values[0].length
+          ) {
+            cn += ' no-data';
+            chart.setData([[]], $scope.timespan, $scope.interval);
+          } else {
+            chart.setData($scope.values, $scope.timespan, $scope.interval);
+          }
+          container.className = cn;
+        });
 
-      container.appendChild(chart.canvas);
+        container.appendChild(chart.canvas);
 
-      var resize = throttle(function() {
-        chart.resize(container.clientWidth, height()).draw();
-      }, 100);
+        var resize = throttle(function() {
+          chart.resize(container.clientWidth, height()).draw();
+        }, 100);
 
-      $window.addEventListener('resize', resize);
+        $window.addEventListener('resize', resize);
 
-      $scope.$on('$destroy', function() {
-        $window.removeEventListener('resize', resize);
-      });
-    },
+        $scope.$on('$destroy', function() {
+          $window.removeEventListener('resize', resize);
+        });
+      },
 
-    template: '<!-- keule!! pech jehabt! -->'
-  };
-}];
+      template: '<!-- keule!! pech jehabt! -->'
+    };
+  }
+];
 
 },{"./../../chart/line":1,"./../../filter/abbreviateNumber":2,"camunda-bpm-sdk-js/vendor/moment":10,"lodash":12}],4:[function(require,module,exports){
 (function (Buffer){
